@@ -1,23 +1,17 @@
-module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
-
-  name               = local.vpc_name
-  cidr               = var.vpc_cidr
-  azs                = var.availability_zones
-  private_subnets    = var.private_subnets
-  public_subnets     = var.public_subnets
-  enable_nat_gateway = var.enable_nat_gateway
-  single_nat_gateway = var.single_nat_gateway
-  create_igw         = var.create_internet_gateway
-  tags               = local.tags
-}
-
 module "ecs" {
   source = "github.com/CDCgov/dibbs-aws//terraform/modules/ecs?ref=b80e6ebd89b0aeed0652b4678102378598865a3e"
 
-  public_subnet_ids  = flatten(module.vpc.public_subnets)
-  private_subnet_ids = flatten(module.vpc.private_subnets)
-  vpc_id             = module.vpc.vpc_id
+  public_subnet_ids  = flatten([    
+    "subnet-0b5f36d63e75c9194",
+    "subnet-0e008a543ea2bba3f"
+  ])
+
+  private_subnet_ids = flatten([
+    "subnet-01208b033707666bb",
+    "subnet-033f13c263267da57"
+  ])
+
+  vpc_id             = "vpc-0170a65e2379f875e"
   region             = var.region
 
   owner   = var.owner
@@ -30,7 +24,7 @@ module "ecs" {
   # non_integrated_viewer = "true"
   # If the intent is to make the ecr-viewer availabble on the public internet, set internal to false (default is true) This requires an internet gateway to be present in the VPC.
   # internal       = false
-  internal       = false
+  internal       = true
   non_integrated_viewer = "true"
   ecr_viewer_app_env = "test"
 }

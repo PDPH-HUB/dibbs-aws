@@ -1,0 +1,67 @@
+name: Deploy to ECS
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'The environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - prod
+          - test
+
+concurrency:
+  group: ${{ github.event.inputs.environment }}-deploy
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  aws_region: us-east-1
+  environment: ${{ github.event.inputs.environment }}
+  owner: ${{vars.OWNER}}
+  project: ${{vars.PROJECT}}
+
+jobs:
+  terraform:
+    name: Run Terraform
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./
+    steps:
+      - name: Check Out Changes
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          role-session-name: githubDeploymentWorkflow
+          aws-region: ${{ vars.REGION }}
+
+      - name: Terraform
+        env:
+          ENVIRONMENT: ${{ env.environment }}
+          BUCKET: ${{ vars.BUCKET }}
+          DYNAMODB_TABLE: ${{ vars.DYNAMODB_TABLE }}
+          REGION: ${{ vars.REGION }}
+          OWNER: ${{ vars.OWNER }}
+          PROJECT: ${{ vars.PROJECT }}
+        shell: bash
+        run: |
+          echo "ENVIRONMENT=$ENVIRONMENT" >> .env
+          echo "BUCKET=$BUCKET" >> .env
+          echo "DYNAMODB_TABLE=$DYNAMODB_TABLE" >> .env
+          echo "REGION=$REGION" >> .env
+          echo "owner = \"$OWNER\"" >> $ENVIRONMENT.tfvars
+          echo "project = \"$PROJECT\"" >> $ENVIRONMENT.tfvars
+          echo "region = \"$REGION\"" >> $ENVIRONMENT.tfvars
+          ./deploy.sh -e $ENVIRONMENT --ci
