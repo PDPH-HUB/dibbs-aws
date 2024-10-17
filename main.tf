@@ -1,5 +1,5 @@
 module "ecs" {
-  source = "github.com/CDCgov/dibbs-aws//terraform/modules/ecs?ref=b80e6ebd89b0aeed0652b4678102378598865a3e"
+  source = "github.com/CDCgov/dibbs-aws//terraform/modules/ecs?ref=e0393f9cc36b444eda16f2b8ce9912332c74ed01"
 
   public_subnet_ids  = flatten([    
     "subnet-0b5f36d63e75c9194",
