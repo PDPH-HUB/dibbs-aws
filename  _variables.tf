@@ -32,7 +32,7 @@ variable "owner" {
 variable "phdi_version" {
   description = "PHDI container image version"
   type        = string
-  default     = "v1.4.4"
+  default     = "v1.7.3"
 }
 
 variable "private_subnets" {
@@ -97,3 +97,4 @@ locals {
     workspace = terraform.workspace
   }
 }
+
