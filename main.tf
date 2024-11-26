@@ -1,4 +1,9 @@
-
+# Make SSL certificate accessible
+data "aws_acm_certificate" "this" {
+  domain   = "" # Cert Domain.
+  types    = ["AMAZON_ISSUED"] # or ["ISSUED"] or ["PRIVATE"] #We can probably leave this out depending on who is providing it.
+  statuses = ["ISSUED"]
+}
 
 
 module "ecs" {
@@ -24,6 +29,9 @@ module "ecs" {
   project = var.project
   tags    = local.tags
 
+  # Pass cert arn to module
+  certificate_arn = data.aws_acm_certificate.this.arn
+
   sqlserver_database_data = {
     non_integrated_viewer = "true"
     metadata_database_type = "sqlserver"
@@ -32,6 +40,8 @@ module "ecs" {
     secrets_manager_sqlserver_password_name = "SQL_DATABASE_PASS"
     secrets_manager_sqlserver_host_name = "SQL_DATABASE_HOST"
   }
+
+  
 
 
   # If intent is to pull from the phdi GHCR, set disable_ecr to true (default is false)
