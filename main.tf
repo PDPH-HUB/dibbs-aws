@@ -1,9 +1,9 @@
 # Make SSL certificate accessible
-data "aws_acm_certificate" "this" {
-  domain   = "internal-dibbs-ce-pdph-prod-1412429004.us-east-1.elb.amazonaws.com" # Cert Domain.
-  types    = ["AMAZON_ISSUED"] # or ["ISSUED"] or ["PRIVATE"] #We can probably leave this out depending on who is providing it.
-  statuses = ["ISSUED"]
-}
+# data "aws_acm_certificate" "this" {
+#   domain   = "internal-dibbs-ce-pdph-prod-1412429004.us-east-1.elb.amazonaws.com" # Cert Domain.
+#   types    = ["AMAZON_ISSUED"] # or ["ISSUED"] or ["PRIVATE"] #We can probably leave this out depending on who is providing it.
+#   statuses = ["ISSUED"]
+# }
 
 
 module "ecs" {
@@ -30,7 +30,7 @@ module "ecs" {
   tags    = local.tags
 
   # Pass cert arn to module
-  certificate_arn = data.aws_acm_certificate.this.arn
+  # certificate_arn = data.aws_acm_certificate.this.arn
 
   sqlserver_database_data = {
     non_integrated_viewer = "true"
