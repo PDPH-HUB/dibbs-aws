@@ -52,4 +52,5 @@ module "ecs" {
   # internal       = false
   internal       = true
   ecr_viewer_app_env = "test"
+  phdi_version = "v1.7.5"
 }
