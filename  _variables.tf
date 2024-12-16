@@ -32,7 +32,7 @@ variable "owner" {
 variable "phdi_version" {
   description = "PHDI container image version"
   type        = string
-  default     = "v1.7.4"
+  default     = "v1.7.6"
 }
 
 variable "private_subnets" {

@@ -10,7 +10,7 @@ module "ecs" {
   
   
   source  = "CDCgov/dibbs-ecr-viewer/aws"
-  version = "0.2.1"
+  version = "0.3.0"
 
   public_subnet_ids  = flatten([    
     "subnet-0b5f36d63e75c9194",
