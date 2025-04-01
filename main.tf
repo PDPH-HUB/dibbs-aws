@@ -71,8 +71,6 @@ module "ecs" {
   #   metadata_database_type = "sqlserver"
   #   metadata_database_schema = "extended" # (core or extended)
   # }
-
-  nbs_auth = false
   
   # If intent is to pull from the phdi GHCR, set disable_ecr to true (default is false)
   # disable_ecr = true
