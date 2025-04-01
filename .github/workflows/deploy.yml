@@ -70,6 +70,7 @@ jobs:
           echo "project = \"$PROJECT\"" >> $WORKSPACE.tfvars
           echo "region = \"$REGION\"" >> $WORKSPACE.tfvars
           terraform init \
+            -upgrade \
             -var-file="$WORKSPACE.tfvars" \
             -backend-config "bucket=$BUCKET" \
             -backend-config "dynamodb_table=$DYNAMODB_TABLE" \

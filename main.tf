@@ -6,11 +6,35 @@ data "aws_acm_certificate" "this" {
 }
 
 
+
+data "aws_secretsmanager_secret" "secret_sql_database_user" {
+  name = "SQL_DATABASE_USER"
+}
+
+data "aws_secretsmanager_secret_version" "secret-version-user" {
+  secret_id = data.aws_secretsmanager_secret.secret_sql_database_user.id
+}
+
+data "aws_secretsmanager_secret" "secret_sql_database_host" {
+  name = "SQL_DATABASE_HOST"
+}
+
+data "aws_secretsmanager_secret_version" "secret-version-host" {
+  secret_id = data.aws_secretsmanager_secret.secret_sql_database_host.id
+}
+
+data "aws_secretsmanager_secret" "secret_sql_database_pass" {
+  name = "SQL_DATABASE_PASS"
+}
+
+data "aws_secretsmanager_secret_version" "secret-version-pass" {
+  secret_id = data.aws_secretsmanager_secret.secret_sql_database_pass.id
+}
+
 module "ecs" {
   
-  
   source  = "CDCgov/dibbs-ecr-viewer/aws"
-  version = "0.2.1"
+  version = "0.4.1"
 
   public_subnet_ids  = flatten([    
     "subnet-0b5f36d63e75c9194",
@@ -31,19 +55,25 @@ module "ecs" {
 
   # Pass cert arn to module
   certificate_arn = data.aws_acm_certificate.this.arn
+  database_type = "sqlserver"
+  # secrets_manager_sqlserver_user_name = 
+  # secrets_manager_sqlserver_password_name = 
+  # secrets_manager_sqlserver_host_name = 
 
-  sqlserver_database_data = {
-    non_integrated_viewer = "true"
-    metadata_database_type = "sqlserver"
-    metadata_database_schema = "extended" # (core or extended)
-    secrets_manager_sqlserver_user_name = "SQL_DATABASE_USER"
-    secrets_manager_sqlserver_password_name = "SQL_DATABASE_PASS"
-    secrets_manager_sqlserver_host_name = "SQL_DATABASE_HOST"
-  }
+  secrets_manager_sqlserver_user_version = data.aws_secretsmanager_secret_version.secret-version-user.secret_string
+  secrets_manager_sqlserver_host_version = data.aws_secretsmanager_secret_version.secret-version-host.secret_string
+  secrets_manager_sqlserver_password_version = data.aws_secretsmanager_secret_version.secret-version-pass.secret_string
+  db_cipher = "DEFAULT:@SECLEVEL=0"
+  dibbs_config_name = "AWS_SQLSERVER_NON_INTEGRATED"
 
+  # sqlserver_database_data = {
+  #   non_integrated_viewer = "true"
+  #   metadata_database_type = "sqlserver"
+  #   metadata_database_schema = "extended" # (core or extended)
+  # }
+
+  nbs_auth = false
   
-
-
   # If intent is to pull from the phdi GHCR, set disable_ecr to true (default is false)
   # disable_ecr = true
   # If intent is to use the non-integrated viewer, set non_integrated_viewer to "true" (default is false)
@@ -51,6 +81,5 @@ module "ecs" {
   # If the intent is to make the ecr-viewer availabble on the public internet, set internal to false (default is true) This requires an internet gateway to be present in the VPC.
   # internal       = false
   internal       = true
-  ecr_viewer_app_env = "test"
-  phdi_version = "v1.7.5"
+  phdi_version = "v2.0.0-beta"
 }
