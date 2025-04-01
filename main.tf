@@ -34,7 +34,7 @@ data "aws_secretsmanager_secret_version" "secret-version-pass" {
 module "ecs" {
   
   source  = "CDCgov/dibbs-ecr-viewer/aws"
-  version = "0.4.1"
+  version = "0.5.1"
 
   public_subnet_ids  = flatten([    
     "subnet-0b5f36d63e75c9194",
@@ -81,5 +81,14 @@ module "ecs" {
   # If the intent is to make the ecr-viewer availabble on the public internet, set internal to false (default is true) This requires an internet gateway to be present in the VPC.
   # internal       = false
   internal       = true
-  phdi_version = "v2.0.0-beta"
+  phdi_version = "v3.0.0"
+
+  # non integrated auth provider example (default values are "" when not set)
+  auth_provider                              = var.auth_provider
+  auth_client_id                             = var.auth_client_id
+  auth_issuer                                = var.auth_issuer
+  auth_url                                   = var.auth_url
+  secrets_manager_auth_secret_version        = var.secrets_manager_auth_secret_version
+  secrets_manager_auth_client_secret_version = var.secrets_manager_auth_client_secret_version
+
 }
