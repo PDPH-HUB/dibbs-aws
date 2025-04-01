@@ -80,7 +80,7 @@ module "ecs" {
   # If the intent is to make the ecr-viewer availabble on the public internet, set internal to false (default is true) This requires an internet gateway to be present in the VPC.
   # internal       = false
   internal       = true
-  phdi_version = "v3.0.0"
+  phdi_version = "3.0.0"
 
   # non integrated auth provider example (default values are "" when not set)
   auth_provider                              = ""
