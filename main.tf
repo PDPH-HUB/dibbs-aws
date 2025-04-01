@@ -60,6 +60,7 @@ module "ecs" {
   # secrets_manager_sqlserver_password_name = 
   # secrets_manager_sqlserver_host_name = 
 
+
   secrets_manager_sqlserver_user_version = data.aws_secretsmanager_secret_version.secret-version-user.secret_string
   secrets_manager_sqlserver_host_version = data.aws_secretsmanager_secret_version.secret-version-host.secret_string
   secrets_manager_sqlserver_password_version = data.aws_secretsmanager_secret_version.secret-version-pass.secret_string
@@ -82,11 +83,10 @@ module "ecs" {
   phdi_version = "v3.0.0"
 
   # non integrated auth provider example (default values are "" when not set)
-  auth_provider                              = var.auth_provider
-  auth_client_id                             = var.auth_client_id
-  auth_issuer                                = var.auth_issuer
-  auth_url                                   = var.auth_url
-  secrets_manager_auth_secret_version        = var.secrets_manager_auth_secret_version
-  secrets_manager_auth_client_secret_version = var.secrets_manager_auth_client_secret_version
-
+  auth_provider                              = ""
+  auth_client_id                             = "" # open this ticket.
+  auth_issuer                                = ""
+  auth_url                                   = ""
+  secrets_manager_auth_secret_version        = ""
+  secrets_manager_auth_client_secret_version = ""
 }

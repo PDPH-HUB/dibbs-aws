@@ -98,3 +98,20 @@ locals {
   }
 }
 
+variable "auth_provider" {
+  description = "The authentication provider used. Either keycloak or ad."
+  type        = string
+  default     = ""
+}
+
+variable "auth_client_id" {
+  description = "The application/client id used to idenitfy the client"
+  type        = string
+  default     = ""
+}
+
+variable "auth_issuer" {
+  description = "Additional information used during authentication process. For Azure AD, this will be the 'Tenant Id'. For Keycloak, this will be the url issuer including the realm - e.g. https://my-keycloak-domain.com/realms/My_Realm"
+  type        = string
+  default     = ""
+}
