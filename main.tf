@@ -86,7 +86,7 @@ module "ecs" {
   auth_provider                              = ""
   auth_client_id                             = "" # open this ticket.
   auth_issuer                                = ""
-  auth_url                                   = ""
-  secrets_manager_auth_secret_version        = ""
+  auth_url                                   = "https://pdphdibbs.phila.gov/ecr-viewer/api/auth"
+  secrets_manager_auth_secret_version        = "AUTH_SECRET_VERSION"
   secrets_manager_auth_client_secret_version = ""
 }
