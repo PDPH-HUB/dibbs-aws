@@ -31,6 +31,16 @@ data "aws_secretsmanager_secret_version" "secret-version-pass" {
   secret_id = data.aws_secretsmanager_secret.secret_sql_database_pass.id
 }
 
+data "aws_secretsmanager_secret" "secret_nextauth_secret" {
+  name = "AUTH_SECRET_VERSION"
+}
+
+data "aws_secretsmanager_secret_version" "secret-version-nextauth" {
+  secret_id = data.aws_secretsmanager_secret.secret_nextauth_secret.id
+}
+
+
+
 module "ecs" {
   
   source  = "CDCgov/dibbs-ecr-viewer/aws"
@@ -87,6 +97,6 @@ module "ecs" {
   auth_client_id                             = "" # open this ticket.
   auth_issuer                                = ""
   auth_url                                   = "https://pdphdibbs.phila.gov/ecr-viewer/api/auth"
-  secrets_manager_auth_secret_version        = "AUTH_SECRET_VERSION"
+  secrets_manager_auth_secret_version        = data.aws_secretsmanager_secret_version.secret-version-nextauth.secret_string
   secrets_manager_auth_client_secret_version = ""
 }
