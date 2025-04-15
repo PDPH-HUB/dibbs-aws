@@ -39,7 +39,13 @@ data "aws_secretsmanager_secret_version" "secret-version-nextauth" {
   secret_id = data.aws_secretsmanager_secret.secret_nextauth_secret.id
 }
 
+data "aws_secretsmanager_secret" "secret_auth_client_secret_version" {
+  name = "AUTH_CLIENT_SECRET_VERSION"
+}
 
+data "aws_secretsmanager_secret_version" "secret-version-authclient-secret" {
+  secret_id = data.aws_secretsmanager_secret.secret_auth_client_secret_version.id
+}
 
 module "ecs" {
   
@@ -93,10 +99,10 @@ module "ecs" {
   phdi_version = "3.0.0"
 
   # non integrated auth provider example (default values are "" when not set)
-  auth_provider                              = ""
-  auth_client_id                             = "" # open this ticket.
-  auth_issuer                                = ""
+  auth_provider                              = "ad"
+  auth_client_id                             = "910cc61a-9dcc-4cef-9fbe-2a9dcf87fbd9"
+  auth_issuer                                = "2046864f-68ea-497d-af34-a6629a6cd700"
   auth_url                                   = "https://pdphdibbs.phila.gov/ecr-viewer/api/auth"
   secrets_manager_auth_secret_version        = data.aws_secretsmanager_secret_version.secret-version-nextauth.secret_string
-  secrets_manager_auth_client_secret_version = ""
+  secrets_manager_auth_client_secret_version = data.aws_secretsmanager_secret_version.secret-version-authclient-secret.secret_string
 }
