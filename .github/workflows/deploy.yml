@@ -17,6 +17,7 @@ on:
         options:
           - plan
           - apply
+          - destroy-plan
           - destroy
 
 concurrency:
@@ -83,6 +84,6 @@ jobs:
           if [ "$ACTION" == "apply" ]; then
             terraform apply -auto-approve -var-file="$WORKSPACE.tfvars"
           fi
-          if ["$ACTION" == "destroy"]; then
-            terraform destroy -auto-aprove -var-file="$WORKSPACE.tfvars"
+          if [ "$ACTION" == "destroy-plan" ]; then
+            terraform destroy -var-file="$WORKSPACE.tfvars"
           fi
