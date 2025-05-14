@@ -18,6 +18,8 @@ on:
           - plan
           - apply
           - plan-destroy
+          - ""
+          - destroy
 
 concurrency:
   group: ${{ github.event.inputs.workspace }}-terraform
@@ -85,4 +87,7 @@ jobs:
           fi
           if [ "$ACTION" == "plan-destroy" ]; then
             terraform plan -destroy -var-file="$WORKSPACE.tfvars"
+          fi
+          if [ "$ACTION" == "destroy" ]; then
+            terraform destroy -auto-approve -var-file="$WORKSPACE.tfvars"
           fi
