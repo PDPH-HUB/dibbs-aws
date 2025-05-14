@@ -1,4 +1,4 @@
-name: Terraform (Plan||Apply)
+name: Terraform (Plan||Apply||Destroy)
 run-name: Terraform ${{ inputs.terraform_action }} ${{ inputs.workspace }} by @${{ github.actor }}
 
 on:
@@ -9,7 +9,6 @@ on:
         required: true
         type: choice
         options:
-          - ""
           - prod
       terraform_action:
         description: 'The terraform action to perform'
@@ -18,6 +17,9 @@ on:
         options:
           - plan
           - apply
+          - plan-destroy
+          - ""
+          - destroy
 
 concurrency:
   group: ${{ github.event.inputs.workspace }}-terraform
@@ -82,4 +84,10 @@ jobs:
           fi
           if [ "$ACTION" == "apply" ]; then
             terraform apply -auto-approve -var-file="$WORKSPACE.tfvars"
+          fi
+          if [ "$ACTION" == "plan-destroy" ]; then
+            terraform plan -destroy -var-file="$WORKSPACE.tfvars"
+          fi
+          if [ "$ACTION" == "destroy" ]; then
+            terraform destroy -auto-approve -var-file="$WORKSPACE.tfvars"
           fi
