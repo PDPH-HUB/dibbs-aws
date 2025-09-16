@@ -15,6 +15,14 @@ data "aws_secretsmanager_secret_version" "secret-version-user" {
   secret_id = data.aws_secretsmanager_secret.secret_sql_database_user.id
 }
 
+# data "aws_secretsmanager_secret" "secret_sql_database_connection_string" {
+#  name = "SQL_DATABASE_USER"
+# }
+
+# data "aws_secretsmanager_secret_version" "secret-version-connection-string" {
+#  secret_id = data.aws_secretsmanager_secret.secret_sql_database_user.id
+# }
+
 data "aws_secretsmanager_secret" "secret_sql_database_host" {
   name = "SQL_DATABASE_HOST"
 }
@@ -71,15 +79,16 @@ module "ecs" {
 
   # Pass cert arn to module
   certificate_arn = data.aws_acm_certificate.this.arn
-  database_type = "sqlserver"
+  # database_type = "sqlserver" (deprecated)
   # secrets_manager_sqlserver_user_name = 
   # secrets_manager_sqlserver_password_name = 
   # secrets_manager_sqlserver_host_name = 
 
 
-  secrets_manager_sqlserver_user_version = data.aws_secretsmanager_secret_version.secret-version-user.secret_string
-  secrets_manager_sqlserver_host_version = data.aws_secretsmanager_secret_version.secret-version-host.secret_string
-  secrets_manager_sqlserver_password_version = data.aws_secretsmanager_secret_version.secret-version-pass.secret_string
+  # secrets_manager_sqlserver_user_version = data.aws_secretsmanager_secret_version.secret-version-user.secret_string
+  # secrets_manager_sqlserver_host_version = data.aws_secretsmanager_secret_version.secret-version-host.secret_string
+  # secrets_manager_sqlserver_password_version = data.aws_secretsmanager_secret_version.secret-version-pass.secret_string
+  secrets_manager_connection_string_version = "" # data.aws_secretsmanager_secret_version.secret-version-connection-string
   db_cipher = "DEFAULT:@SECLEVEL=0"
   dibbs_config_name = "AWS_SQLSERVER_NON_INTEGRATED"
 
