@@ -88,7 +88,7 @@ module "ecs" {
   # secrets_manager_sqlserver_user_version = data.aws_secretsmanager_secret_version.secret-version-user.secret_string
   # secrets_manager_sqlserver_host_version = data.aws_secretsmanager_secret_version.secret-version-host.secret_string
   # secrets_manager_sqlserver_password_version = data.aws_secretsmanager_secret_version.secret-version-pass.secret_string
-  secrets_manager_connection_string_version = "" # data.aws_secretsmanager_secret_version.secret-version-connection-string
+  secrets_manager_connection_string_version = "DEV_SQL_CONNECTION_STRING" # data.aws_secretsmanager_secret_version.secret-version-connection-string
   db_cipher = "DEFAULT:@SECLEVEL=0"
   dibbs_config_name = "AWS_SQLSERVER_NON_INTEGRATED"
 
