@@ -1,46 +1,20 @@
 # Make SSL certificate accessible
 data "aws_acm_certificate" "this" {
-  domain   = "pdphdibbs.phila.gov" # Cert Domain.
-  types    = ["AMAZON_ISSUED"] # or ["ISSUED"] or ["PRIVATE"] #We can probably leave this out depending on who is providing it.
+  domain   = var.cert_name
+  types    = ["AMAZON_ISSUED"]
   statuses = ["ISSUED"]
 }
 
-
-
-data "aws_secretsmanager_secret" "secret_sql_database_user" {
-  name = "SQL_DATABASE_USER"
+data "aws_secretsmanager_secret" "secret_sql_connection_string" { 
+  name = var.secret_manager__connection_string_version
 }
 
-data "aws_secretsmanager_secret_version" "secret-version-user" {
-  secret_id = data.aws_secretsmanager_secret.secret_sql_database_user.id
+data "aws_secretsmanager_secret_version" "connection_string_version" {
+  secret_id = data.aws_secretsmanager_secret.secret_sql_connection_string.id
 }
 
-data "aws_secretsmanager_secret" "secret_sql_database_connection_string" {
-  name = "DEV_SQL_CONNECTION_STRING"
- }
-
- data "aws_secretsmanager_secret_version" "secret-version-connection-string" {
-  secret_id = data.aws_secretsmanager_secret.secret_sql_database_connection_string.id
- }
-
-data "aws_secretsmanager_secret" "secret_sql_database_host" {
-  name = "SQL_DATABASE_HOST"
-}
-
-data "aws_secretsmanager_secret_version" "secret-version-host" {
-  secret_id = data.aws_secretsmanager_secret.secret_sql_database_host.id
-}
-
-data "aws_secretsmanager_secret" "secret_sql_database_pass" {
-  name = "SQL_DATABASE_PASS"
-}
-
-data "aws_secretsmanager_secret_version" "secret-version-pass" {
-  secret_id = data.aws_secretsmanager_secret.secret_sql_database_pass.id
-}
-
-data "aws_secretsmanager_secret" "secret_nextauth_secret" {
-  name = "AUTH_SECRET_VERSION"
+data "aws_secretsmanager_secret" "secret_nextauth_secret" { 
+  name = var.secret_manager__auth_secret_version
 }
 
 data "aws_secretsmanager_secret_version" "secret-version-nextauth" {
@@ -48,7 +22,7 @@ data "aws_secretsmanager_secret_version" "secret-version-nextauth" {
 }
 
 data "aws_secretsmanager_secret" "secret_auth_client_secret_version" {
-  name = "AUTH_CLIENT_SECRET_VERSION"
+  name = var.secret_manager__auth_client_secret_version
 }
 
 data "aws_secretsmanager_secret_version" "secret-version-authclient-secret" {
@@ -60,17 +34,11 @@ module "ecs" {
   source  = "CDCgov/dibbs-ecr-viewer/aws"
   version = "0.8.7"
 
-  public_subnet_ids  = flatten([    
-    "subnet-0b5f36d63e75c9194",
-    "subnet-0e008a543ea2bba3f"
-  ])
+  public_subnet_ids  = flatten(var.public_subnets)
 
-  private_subnet_ids = flatten([
-    "subnet-01208b033707666bb",
-    "subnet-033f13c263267da57"
-  ])
+  private_subnet_ids = flatten(var.private_subnets)
 
-  vpc_id             = "vpc-0170a65e2379f875e"
+  vpc_id             = var.vpc_id
   region             = var.region
 
   owner   = var.owner
@@ -79,26 +47,14 @@ module "ecs" {
 
   # Pass cert arn to module
   certificate_arn = data.aws_acm_certificate.this.arn
-  # database_type = "sqlserver" (deprecated)
-  # secrets_manager_sqlserver_user_name = 
-  # secrets_manager_sqlserver_password_name = 
-  # secrets_manager_sqlserver_host_name = 
-
-
-  # secrets_manager_sqlserver_user_version = data.aws_secretsmanager_secret_version.secret-version-user.secret_string
-  # secrets_manager_sqlserver_host_version = data.aws_secretsmanager_secret_version.secret-version-host.secret_string
-  # secrets_manager_sqlserver_password_version = data.aws_secretsmanager_secret_version.secret-version-pass.secret_string
-  secrets_manager_connection_string_version = data.aws_secretsmanager_secret_version.secret-version-connection-string.secret_string
-  # "DEV_SQL_CONNECTION_STRING"
-  db_cipher = "DEFAULT:@SECLEVEL=0"
-  dibbs_config_name = "AWS_SQLSERVER_NON_INTEGRATED"
-
-  # sqlserver_database_data = {
-  #   non_integrated_viewer = "true"
-  #   metadata_database_type = "sqlserver"
-  #   metadata_database_schema = "extended" # (core or extended)
-  # }
   
+  # database_type = var.ecr_viewer_database_type
+
+  secrets_manager_connection_string_version = data.aws_secretsmanager_secret_version.connection_string_version.secret_string
+
+  db_cipher = var.db_cipher
+  dibbs_config_name = var.ecr_viewer_database_schema
+
   # If intent is to pull from the phdi GHCR, set disable_ecr to true (default is false)
   # disable_ecr = true
   # If intent is to use the non-integrated viewer, set non_integrated_viewer to "true" (default is false)
@@ -109,23 +65,21 @@ module "ecs" {
   phdi_version = var.phdi_version
 
   # non integrated auth provider example (default values are "" when not set)
-  auth_provider                              = "ad"
-  auth_client_id                             = "910cc61a-9dcc-4cef-9fbe-2a9dcf87fbd9"
-  auth_issuer                                = "2046864f-68ea-497d-af34-a6629a6cd700"
-  auth_url                                   = "https://pdphdibbs.phila.gov/ecr-viewer/api/auth"
+  auth_provider                              = var.auth_provider
+  auth_client_id                             = var.auth_client_id
+  auth_issuer                                = var.auth_issuer
+  auth_url                                   = var.auth_url
   secrets_manager_auth_secret_version        = data.aws_secretsmanager_secret_version.secret-version-nextauth.secret_string
   secrets_manager_auth_client_secret_version = data.aws_secretsmanager_secret_version.secret-version-authclient-secret.secret_string
 
   # Set Container Size
   override_autoscaling = {
-    fhir-converter = {
-    cpu = 2048
-    memory = 4096
-    max_capacity = 5
-    min_capacity = 1
-    target_cpu = 60
-    target_memory = 70
-    }
+    # Define fhir converter resources
+    fhir-converter = var.task_size_overrides[0]
   }
+
+  # Logging for ALB
+  enable_alb_logs = var.enable_alb_logs
+  s3_logging_bucket_name = local.s3_logging_bucket_name
 
 }
