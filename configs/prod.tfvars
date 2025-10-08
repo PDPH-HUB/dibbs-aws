@@ -65,6 +65,7 @@ task_size_overrides = [
 # This does not include secrets for connecting to the database itself
 # ------------------------------------------------------------------------------------------------------
 
+db_cipher = "DEFAULT:@SECLEVEL=0"
 
 # ------------------------------------------------------------------------------------------------------
 # Authentication Details
