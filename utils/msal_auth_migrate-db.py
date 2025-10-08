@@ -1,17 +1,29 @@
 import msal
 import requests
+import yaml
+
+# Environment selector
+ENVIRONMENT = "prod"  # Change to "dev" or "prod"
+
+def load_config():
+    with open('configs/migrate-db_config.yml', 'r') as file:
+        config = yaml.safe_load(file)
+    return config[ENVIRONMENT]
+
+# Load configuration
+config = load_config()
 
 # Entra config
-CLIENT_ID = ""
-CLIENT_SECRET = ""
-TENANT_ID = ""
+CLIENT_ID = config['client_id']
+CLIENT_SECRET = config['client_secret']
+TENANT_ID = config['tenant_id']
 AUTHORITY = f"https://login.microsoftonline.com/{TENANT_ID}"
 DIBBS_SCOPE = f"{CLIENT_ID}/.default"
 
 # migrate-db config
-DIBBS_URL = "https://pdphdibbs.phila.gov"
-MIGRATION_SECRET = ""
-INIT_ADMIN_EMAIL = "christopher.stevens@phila.gov"
+DIBBS_URL = config['dibbs_url']
+MIGRATION_SECRET = config['migration_secret']
+INIT_ADMIN_EMAIL = config['init_admin_email']
 
 def get_bearer_token():
     app = msal.ConfidentialClientApplication(CLIENT_ID, client_credential=CLIENT_SECRET, authority=AUTHORITY)
