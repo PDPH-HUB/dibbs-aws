@@ -10,6 +10,7 @@ on:
         type: choice
         options:
           - prod
+          - dev
       terraform_action:
         description: 'The terraform action to perform'
         required: true
@@ -18,7 +19,7 @@ on:
           - plan
           - apply
           - plan-destroy
-          - ""
+          - "---"
           - destroy
 
 concurrency:
@@ -50,10 +51,19 @@ jobs:
         with:
           terraform_version: "1.9.8"
 
-      - name: configure aws credentials
+      - name: configure aws production credentials
+        if: env.workspace == 'prod'
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          role-session-name: githubDeploymentWorkflow
+          aws-region: ${{ vars.AWS_REGION }}
+        
+      - name: configure aws dev credentials
+        if: env.workspace == 'dev'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEV_ROLE_ARN }}
           role-session-name: githubDeploymentWorkflow
           aws-region: ${{ vars.AWS_REGION }}
 
@@ -62,32 +72,29 @@ jobs:
           ACTION: ${{ env.terraform_action }}
           BUCKET: ${{ vars.TFSTATE_BUCKET }}
           DYNAMODB_TABLE: ${{ vars.TFSTATE_DYNAMODB_TABLE }}
-          OWNER: ${{ vars.OWNER }}
-          PROJECT: ${{ vars.PROJECT }}
+          # OWNER: ${{ vars.OWNER }}
+          # PROJECT: ${{ vars.PROJECT }}
           REGION: ${{ vars.AWS_REGION }}
           WORKSPACE: ${{ env.workspace }}
         shell: bash
         run: |
-          echo "owner = \"$OWNER\"" >> $WORKSPACE.tfvars
-          echo "project = \"$PROJECT\"" >> $WORKSPACE.tfvars
-          echo "region = \"$REGION\"" >> $WORKSPACE.tfvars
           terraform init \
             -upgrade \
-            -var-file="$WORKSPACE.tfvars" \
+            -var-file="configs/$WORKSPACE.tfvars" \
             -backend-config "bucket=$BUCKET" \
             -backend-config "dynamodb_table=$DYNAMODB_TABLE" \
             -backend-config "region=$REGION" \
             || (echo "terraform init failed, exiting..." && exit 1)
-          terraform workspace select "$WORKSPACE"
+          terraform workspace select -or-create "$WORKSPACE"
           if [ "$ACTION" == "plan" ]; then
-            terraform plan -var-file="$WORKSPACE.tfvars"
+            terraform plan -var-file="configs/$WORKSPACE.tfvars"
           fi
           if [ "$ACTION" == "apply" ]; then
-            terraform apply -auto-approve -var-file="$WORKSPACE.tfvars"
+            terraform apply -auto-approve -var-file="configs/$WORKSPACE.tfvars"
           fi
           if [ "$ACTION" == "plan-destroy" ]; then
-            terraform plan -destroy -var-file="$WORKSPACE.tfvars"
+            terraform plan -destroy -var-file="configs/$WORKSPACE.tfvars"
           fi
           if [ "$ACTION" == "destroy" ]; then
-            terraform destroy -auto-approve -var-file="$WORKSPACE.tfvars"
+            terraform destroy -auto-approve -var-file="configs/$WORKSPACE.tfvars"
           fi
