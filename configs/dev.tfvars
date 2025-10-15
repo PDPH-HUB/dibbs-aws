@@ -43,7 +43,6 @@ cert_name = "dev-pdphdibbs.phila.gov"
 # This defines the application version being deployed and the resources they're deployed with
 # ------------------------------------------------------------------------------------------------------
 
-# Container Versions and Configurations
 phdi_version = "8.1.0"
 
 task_size_overrides = [ 
@@ -61,7 +60,6 @@ task_size_overrides = [
 
 # S3 Logging Bucket
 enable_alb_logs = true
-
 
 # ------------------------------------------------------------------------------------------------------
 # Database Configurations
