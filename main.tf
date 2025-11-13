@@ -32,7 +32,7 @@ data "aws_secretsmanager_secret_version" "secret-version-authclient-secret" {
 module "ecs" {
   
   source  = "CDCgov/dibbs-ecr-viewer/aws"
-  version = "0.8.7"
+  version = "0.9.0"
 
   public_subnet_ids  = flatten(var.public_subnets)
 
