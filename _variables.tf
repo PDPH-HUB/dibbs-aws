@@ -133,7 +133,7 @@ variable "task_size_overrides" {
 variable "phdi_version" {
   description = "PHDI container image version"
   type        = string
-  default     = "8.0.0"
+  default     = "8.1.0"
 }
 
 variable "enable_alb_logs" {

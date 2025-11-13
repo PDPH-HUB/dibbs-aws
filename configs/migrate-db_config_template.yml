@@ -1,0 +1,44 @@
+# ECR Viewer DB Migration Tool Configuration Template
+# Copy this file to 'configs/config.yml' and replace the placeholder values with your actual configuration
+# Then set the ENVIRONMENT variable in msal_auth_migrate-db.py to either "dev" or "prod" and run the script
+# Do not commit 'configs/config.yml' to version control
+
+dev:
+  # Azure AD Application (Client) ID for dev environment
+  client_id: "your-dev-client-id-here"
+  
+  # Azure AD Application Client Secret for dev environment
+  client_secret: "your-dev-client-secret-here"
+  
+  # Azure AD Tenant (Directory) ID for dev environment
+  tenant_id: "your-dev-tenant-id-here"
+  
+  # Base URL for the DIBBS application in development
+  dibbs_url: "https://dev-dibbs.phila.gov"
+  
+  # Secret key required for database migration in development (check ecs logs after deploy)
+  # This changes every time the ecs task is restarted
+  migration_secret: "your-dev-migration-secret-here"
+  
+  # Email address of the initial admin user for ECR viewer 
+  init_admin_email: "dev-admin@phila.gov"
+
+prod:
+  # Azure AD Application (Client) ID for prod environment
+  client_id: "your-prod-client-id-here"
+  
+  # Azure AD Application Client Secret for prod environment
+  client_secret: "your-prod-client-secret-here"
+  
+  # Azure AD Tenant (Directory) ID for prod environment
+  tenant_id: "your-prod-tenant-id-here"
+  
+  # Base URL for the DIBBS application in production
+  dibbs_url: "https://pdphdibbs.phila.gov"
+  
+  # Secret key required for database migration in production (check ecs logs after deploy)
+  # This changes every time the ecs task is restarted
+  migration_secret: "your-prod-migration-secret-here"
+  
+  # Email address of the initial admin user for production
+  init_admin_email: "admin@phila.gov"
