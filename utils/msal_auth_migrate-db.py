@@ -3,7 +3,7 @@ import requests
 import yaml
 
 # Environment selector
-ENVIRONMENT = "prod"  # Change to "dev" or "prod"
+ENVIRONMENT = "dev"  # Change to "dev" or "prod"
 
 def load_config():
     with open('configs/migrate-db_config.yml', 'r') as file:
