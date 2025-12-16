@@ -1,12 +1,15 @@
 import msal
 import requests
 import yaml
+from pathlib import Path
 
 # Environment selector
 ENVIRONMENT = "dev"  # Change to "dev" or "prod"
 
 def load_config():
-    with open('configs/migrate-db_config.yml', 'r') as file:
+    script_dir = Path(__file__).parent.parent
+    config_path = script_dir / 'configs' / 'migrate-db_config.yml'
+    with open(config_path, 'r') as file:
         config = yaml.safe_load(file)
     return config[ENVIRONMENT]
 
@@ -29,11 +32,11 @@ def get_bearer_token():
     app = msal.ConfidentialClientApplication(CLIENT_ID, client_credential=CLIENT_SECRET, authority=AUTHORITY)
     result = app.acquire_token_for_client(scopes=[DIBBS_SCOPE])
     
-    if "access_token" in result:
+    if result is not None and "access_token" in result:
         return result["access_token"]
     else:
-        print(f"Error: {result.get('error', 'Unknown error')}")
-        print(f"Description: {result.get('error_description', 'No description')}")
+        print(f"Error: {result.get('error', 'Unknown error')}") # type: ignore
+        print(f"Description: {result.get('error_description', 'No description')}") # type: ignore
         print(f"Full result: {result}")
         return None
 
