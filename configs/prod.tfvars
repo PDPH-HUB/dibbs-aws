@@ -43,7 +43,7 @@ cert_name = "pdphdibbs.phila.gov"
 # This defines the application version being deployed and the resources they're deployed with
 # ------------------------------------------------------------------------------------------------------
 
-phdi_version = "8.3.3"
+phdi_version = "8.4.0"
 
 task_size_overrides = [ 
     
