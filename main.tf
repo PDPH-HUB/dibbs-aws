@@ -32,7 +32,7 @@ data "aws_secretsmanager_secret_version" "secret-version-authclient-secret" {
 module "ecs" {
   
   source  = "CDCgov/dibbs-ecr-viewer/aws"
-  version = "0.10.0"
+  version = "0.11.1"
 
   public_subnet_ids  = flatten(var.public_subnets)
 
@@ -82,7 +82,8 @@ module "ecs" {
   enable_alb_logs = var.enable_alb_logs
   s3_logging_bucket_name = local.s3_logging_bucket_name
 
-  # Alis timeout fix - thank you, Alis!
-  alb_idle_timeout = 900 # Default = 900s
+  # Timeouts
+  alb_idle_timeout = 1800 # seconds
+  ecr_processing_timeout = 1800000 # miliseconds
 
 }
