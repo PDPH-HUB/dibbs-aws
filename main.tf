@@ -5,30 +5,6 @@ data "aws_acm_certificate" "this" {
   statuses = ["ISSUED"]
 }
 
-data "aws_secretsmanager_secret" "secret_sql_connection_string" { 
-  name = var.secret_manager__connection_string_version
-}
-
-data "aws_secretsmanager_secret_version" "connection_string_version" {
-  secret_id = data.aws_secretsmanager_secret.secret_sql_connection_string.id
-}
-
-data "aws_secretsmanager_secret" "secret_nextauth_secret" { 
-  name = var.secret_manager__auth_secret_version
-}
-
-data "aws_secretsmanager_secret_version" "secret-version-nextauth" {
-  secret_id = data.aws_secretsmanager_secret.secret_nextauth_secret.id
-}
-
-data "aws_secretsmanager_secret" "secret_auth_client_secret_version" {
-  name = var.secret_manager__auth_client_secret_version
-}
-
-data "aws_secretsmanager_secret_version" "secret-version-authclient-secret" {
-  secret_id = data.aws_secretsmanager_secret.secret_auth_client_secret_version.id
-}
-
 module "ecs" {
   
   source  = "CDCgov/dibbs-ecr-viewer/aws"
@@ -50,7 +26,7 @@ module "ecs" {
   
   # database_type = var.ecr_viewer_database_type
 
-  secrets_manager_connection_string_version = data.aws_secretsmanager_secret_version.connection_string_version.secret_string
+  secrets_manager_connection_string_version = var.secret_manager__connection_string_version
 
   db_cipher = var.db_cipher
   dibbs_config_name = var.ecr_viewer_database_schema
@@ -69,8 +45,8 @@ module "ecs" {
   auth_client_id                             = var.auth_client_id
   auth_issuer                                = var.auth_issuer
   auth_url                                   = var.auth_url
-  secrets_manager_auth_secret_version        = data.aws_secretsmanager_secret_version.secret-version-nextauth.secret_string
-  secrets_manager_auth_client_secret_version = data.aws_secretsmanager_secret_version.secret-version-authclient-secret.secret_string
+  secrets_manager_auth_secret_version        = var.secret_manager__auth_secret_version
+  secrets_manager_auth_client_secret_version = var.secret_manager__auth_client_secret_version
 
   # Set Container Size
   override_autoscaling = {
