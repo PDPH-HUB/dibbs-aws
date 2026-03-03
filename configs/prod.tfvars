@@ -80,13 +80,3 @@ auth_provider   = "ad"
 auth_client_id  = "910cc61a-9dcc-4cef-9fbe-2a9dcf87fbd9"
 auth_issuer     = "2046864f-68ea-497d-af34-a6629a6cd700"
 auth_url        = "https://pdphdibbs.phila.gov/ecr-viewer/api/auth"
-
-# ------------------------------------------------------------------------------------------------------
-# AWS Secrets Manager References
-# ------------------------------------------------------------------------------------------------------
-# These reference secrets managed in AWS
-# ------------------------------------------------------------------------------------------------------
-
-secret_manager__auth_secret_version = "AUTH_SECRET_VERSION"
-secret_manager__auth_client_secret_version = "AUTH_CLIENT_SECRET_VERSION"
-secret_manager__connection_string_version = "PROD_SQL_CONNECTION_STRING"
