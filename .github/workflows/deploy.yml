@@ -67,6 +67,15 @@ jobs:
           role-session-name: githubDeploymentWorkflow
           aws-region: ${{ vars.AWS_REGION }}
 
+      - name: Detach legacy ecrv policy (one-time upgrade pre-requisite)
+        if: env.workspace == 'dev' && env.terraform_action == 'apply'
+        run: |
+          aws iam detach-role-policy \
+            --role-name dibbs-ce-pdph-dev-ecrv \
+            --policy-arn arn:aws:iam::047719641506:policy/dibbs-ce-pdph-dev-ecrv-policy \
+          && echo "Policy detached successfully" \
+          || echo "Policy already detached or not found, continuing"
+
       - name: Terraform
         env:
           ACTION: ${{ env.terraform_action }}
