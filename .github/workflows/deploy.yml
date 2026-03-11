@@ -38,6 +38,7 @@ jobs:
   terraform:
     name: Run Terraform
     runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.workspace == 'prod' && 'Prod' || 'Dev' }}
     defaults:
       run:
         shell: bash
@@ -67,6 +68,15 @@ jobs:
           role-session-name: githubDeploymentWorkflow
           aws-region: ${{ vars.AWS_REGION }}
 
+      - name: Detach legacy ecrv policy (one-time upgrade pre-requisite)
+        if: env.workspace == 'dev' && env.terraform_action == 'apply'
+        run: |
+          aws iam detach-role-policy \
+            --role-name dibbs-ce-pdph-dev-ecrv \
+            --policy-arn arn:aws:iam::047719641506:policy/dibbs-ce-pdph-dev-ecrv-policy \
+          && echo "Policy detached successfully" \
+          || echo "Policy already detached or not found, continuing"
+
       - name: Terraform
         env:
           ACTION: ${{ env.terraform_action }}
@@ -74,9 +84,9 @@ jobs:
           DYNAMODB_TABLE: ${{ vars.TFSTATE_DYNAMODB_TABLE }}
           REGION: ${{ vars.AWS_REGION }}
           WORKSPACE: ${{ env.workspace }}
-          TF_VAR_secret_manager__connection_string_version: ${{ env.workspace == 'prod' && secrets.PROD_SQL_CONNECTION_STRING || secrets.DEV_SQL_CONNECTION_STRING }}
-          TF_VAR_secret_manager__auth_secret_version: ${{ env.workspace == 'prod' && secrets.PROD_AUTH_SECRET_VERSION || secrets.DEV_AUTH_SECRET_VERSION }}
-          TF_VAR_secret_manager__auth_client_secret_version: ${{ env.workspace == 'prod' && secrets.PROD_AUTH_CLIENT_SECRET_VERSION || secrets.DEV_AUTH_CLIENT_SECRET_VERSION }}
+          TF_VAR_secret_manager__connection_string_version: ${{ github.event.inputs.workspace == 'prod' && secrets.PROD_SQL_CONNECTION_STRING || secrets.DEV_SQL_CONNECTION_STRING }}
+          TF_VAR_secret_manager__auth_secret_version: ${{ github.event.inputs.workspace == 'prod' && secrets.PROD_AUTH_SECRET_VERSION || secrets.DEV_AUTH_SECRET_VERSION }}
+          TF_VAR_secret_manager__auth_client_secret_version: ${{ github.event.inputs.workspace == 'prod' && secrets.PROD_AUTH_CLIENT_SECRET_VERSION || secrets.DEV_AUTH_CLIENT_SECRET_VERSION }}
         shell: bash
         run: |
           terraform init \
