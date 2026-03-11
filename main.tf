@@ -8,7 +8,7 @@ data "aws_acm_certificate" "this" {
 module "ecs" {
   
   source  = "CDCgov/dibbs-ecr-viewer/aws"
-  version = "0.12.0"
+  version = "1.0.0"
 
   public_subnet_ids  = flatten(var.public_subnets)
 
