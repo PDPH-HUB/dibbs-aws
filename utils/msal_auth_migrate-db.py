@@ -4,7 +4,7 @@ import yaml
 from pathlib import Path
 
 # Environment selector
-ENVIRONMENT = "dev"  # Change to "dev" or "prod"
+ENVIRONMENT = "dev"
 
 def load_config():
     script_dir = Path(__file__).parent.parent
