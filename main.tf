@@ -21,6 +21,9 @@ module "ecs" {
   project = var.project
   tags    = local.tags
 
+  # So allow URI path rule doesn't get tossed out:
+  waf_web_acl_arn = var.waf_web_acl_arn
+
   # Pass cert arn to module
   certificate_arn = data.aws_acm_certificate.this.arn
   

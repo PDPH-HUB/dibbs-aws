@@ -35,6 +35,7 @@ private_subnets = [
   ]
 
 vpc_id = "vpc-024d5f60537ead672"
+waf_web_acl_arn = "arn:aws:wafv2:us-east-1:047719641506:regional/webacl/dibbs-ce-pdph-dev-waf/7b44bf52-9d27-4c8a-a967-93e66190c6b3"
 cert_name = "dev-pdphdibbs.phila.gov"
 
 # ------------------------------------------------------------------------------------------------------
@@ -43,7 +44,7 @@ cert_name = "dev-pdphdibbs.phila.gov"
 # This defines the application version being deployed and the resources they're deployed with
 # ------------------------------------------------------------------------------------------------------
 
-phdi_version = "8.6.0"
+phdi_version = "9.0.0"
 
 task_size_overrides = [ 
     

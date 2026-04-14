@@ -107,6 +107,12 @@ variable "cert_name" {
   type = string
 } 
 
+variable "waf_web_acl_arn" {
+  description = "Existing WAF Web ACL ARN to associate with ALB. If empty, a new ACL will be created."
+  type        = string
+  default     = ""
+}
+
 # ------------------------------------------------------------------------------------------------------
 # Application Configurations
 # ------------------------------------------------------------------------------------------------------
