@@ -302,6 +302,7 @@ data "aws_iam_policy_document" "request_tags_create_actions" {
       "logs:TagResource",
       "logs:UntagResource",
       "servicediscovery:CreatePrivateDnsNamespace",
+      "servicediscovery:CreateService",
       "SNS:CreateTopic",
       "wafv2:CreateIPSet",
     ]

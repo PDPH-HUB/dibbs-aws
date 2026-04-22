@@ -28,8 +28,12 @@ data "http" "myip" {
 resource "aws_security_group" "db_setup" {
   vpc_id = var.vpc_id
 
+  # Database setup security group for SSH access from user IP
+  description = "Database setup security group for SSH access from user IP"
+
   # Allow inbound traffic on port 22 to SSH from the user's IP address
   ingress {
+    description = "Allow SSH access from user's IP address"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -40,6 +44,7 @@ resource "aws_security_group" "db_setup" {
   # https://avd.aquasec.com/misconfig/aws/ec2/avd-aws-0104/
   # trivy:ignore:AVD-AWS-0104
   egress {
+    description = "Allow all outbound traffic from the security group"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"

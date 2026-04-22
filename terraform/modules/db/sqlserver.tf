@@ -36,8 +36,12 @@ resource "aws_db_parameter_group" "sqlserver" {
 resource "aws_security_group" "sqlserver" {
   vpc_id = var.vpc_id
 
+  # SQL Server database security group for port 1433 access within VPC
+  description = "SQL Server database security group for port 1433 access within VPC"
+
   # Allow inbound traffic on port 1433 for SqlServer from within the VPC
   ingress {
+    description = "Allow SQL Server access from within VPC"
     from_port   = 1433
     to_port     = 1433
     protocol    = "tcp"
@@ -46,6 +50,7 @@ resource "aws_security_group" "sqlserver" {
 
   # Allow all outbound traffic
   egress {
+    description = "Allow all outbound traffic from the security group"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"

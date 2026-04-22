@@ -43,8 +43,12 @@ resource "aws_db_parameter_group" "postgresql" {
 resource "aws_security_group" "postgresql" {
   vpc_id = var.vpc_id
 
+  # PostgreSQL database security group for port 5432 access within VPC
+  description = "PostgreSQL database security group for port 5432 access within VPC"
+
   # Allow inbound traffic on port 5432 for PostgreSQL from within the VPC
   ingress {
+    description = "Allow PostgreSQL access from within VPC"
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
@@ -53,6 +57,7 @@ resource "aws_security_group" "postgresql" {
 
   # Allow all outbound traffic
   egress {
+    description = "Allow all outbound traffic from the security group"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
