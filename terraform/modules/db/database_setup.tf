@@ -25,6 +25,7 @@ data "http" "myip" {
   url = "https://ipv4.icanhazip.com"
 }
 
+# checkov:skip=CKV_AWS_382: Ephemeral DB setup instances require internet access for provisioning (apt install, sqlcmd download)
 resource "aws_security_group" "db_setup" {
   vpc_id = var.vpc_id
 
@@ -40,10 +41,10 @@ resource "aws_security_group" "db_setup" {
     cidr_blocks = ["${chomp(data.http.myip.response_body)}/32"]
   }
 
+  # checkov:skip=CKV_AWS_382: Ephemeral DB setup instances require internet access for provisioning (apt install, sqlcmd download)
   # Allow all outbound traffic
   # https://avd.aquasec.com/misconfig/aws/ec2/avd-aws-0104/
   # trivy:ignore:AVD-AWS-0104
-  # checkov:skip/CKV_AWS_382: Ephemeral DB setup instances require internet access for provisioning (apt install, sqlcmd download)
   egress {
     description = "Allow all outbound traffic from the security group"
     from_port   = 0
