@@ -47,9 +47,6 @@ data "aws_iam_policy_document" "storage" {
   }
 }
 
-# checkov:skip=CKV_AWS_111: Deployment role needs broad read permissions to discover and manage resources across the account
-# checkov:skip=CKV_AWS_108: Deployment role needs broad read permissions to discover and manage resources across the account
-# checkov:skip=CKV_AWS_356: Deployment role needs broad read permissions to discover and manage resources across the account
 # trivy:ignore:AVD-AWS-0057
 data "aws_iam_policy_document" "wildcard" {
   # checkov:skip=CKV_AWS_111: Deployment role needs broad read permissions to discover and manage resources across the account
