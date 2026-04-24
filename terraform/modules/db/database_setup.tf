@@ -43,6 +43,7 @@ resource "aws_security_group" "db_setup" {
   # Allow all outbound traffic
   # https://avd.aquasec.com/misconfig/aws/ec2/avd-aws-0104/
   # trivy:ignore:AVD-AWS-0104
+  # checkov:skip/CKV_AWS_382: Ephemeral DB setup instances require internet access for provisioning (apt install, sqlcmd download)
   egress {
     description = "Allow all outbound traffic from the security group"
     from_port   = 0

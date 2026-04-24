@@ -48,6 +48,9 @@ data "aws_iam_policy_document" "storage" {
 
 # Wildcard policy
 # trivy:ignore:AVD-AWS-0057
+# checkov:skip/CKV_AWS_111: Deployment role needs broad read permissions to discover and manage resources across the account
+# checkov:skip/CKV_AWS_108: Deployment role needs broad read permissions to discover and manage resources across the account
+# checkov:skip/CKV_AWS_356: Deployment role needs broad read permissions to discover and manage resources across the account
 data "aws_iam_policy_document" "wildcard" {
   statement {
     actions = [
@@ -163,6 +166,7 @@ data "aws_iam_policy_document" "scoped_one" {
       "logs:ListTagsForResource",
       "rds:DescribeDBParameters",
       "servicediscovery:GetNamespace",
+      "servicediscovery:GetService",
       "servicediscovery:GetOperation",
       "servicediscovery:ListTagsForResource",
       "SNS:GetTopicAttributes",
@@ -479,6 +483,7 @@ data "aws_iam_policy_document" "resource_tags_delete_actions" {
       "rds:DeleteDBInstance",
       "rds:DeleteDBParameterGroup",
       "servicediscovery:DeleteNamespace",
+      "servicediscovery:DeleteService",
       "SNS:DeleteTopic",
       "wafv2:DeleteIPSet",
       "wafv2:DeleteWebACL",
@@ -512,6 +517,7 @@ data "aws_iam_policy_document" "resource_tags_delete_actions" {
       "arn:aws:rds:${var.region}:${data.aws_caller_identity.current.account_id}:pg:${local.vpc_id}",
       "arn:aws:servicediscovery:${var.region}:${data.aws_caller_identity.current.account_id}:secret:*",
       "arn:aws:servicediscovery:${var.region}:${data.aws_caller_identity.current.account_id}:namespace/*",
+      "arn:aws:servicediscovery:${var.region}:${data.aws_caller_identity.current.account_id}:service/*",
       "arn:aws:sns:${var.region}:${data.aws_caller_identity.current.account_id}:*",
       "arn:aws:wafv2:${var.region}:${data.aws_caller_identity.current.account_id}:regional/ipset/*",
       "arn:aws:wafv2:${var.region}:${data.aws_caller_identity.current.account_id}:regional/webacl/*/*",
