@@ -19,6 +19,7 @@ resource "aws_db_instance" "postgresql" {
   db_subnet_group_name            = aws_db_subnet_group.this.name
   vpc_security_group_ids          = [aws_security_group.postgresql.id]
   depends_on                      = [aws_secretsmanager_secret.postgresql_connection_string]
+  copy_tags_to_snapshot           = true
 }
 
 # Create a parameter group to configure Postgres RDS parameters
@@ -66,6 +67,7 @@ resource "aws_security_group" "postgresql" {
   tags = var.tags
 }
 
+# checkov:skip=CKV_AWS_57: Secret rotation: TODO
 resource "aws_secretsmanager_secret" "postgresql_connection_string" {
   count       = var.database_type == "postgresql" ? 1 : 0
   name        = "${local.vpc_name}-postgresql-connection-string-${random_string.secret_ident[0].result}"

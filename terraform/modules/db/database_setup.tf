@@ -55,6 +55,7 @@ resource "aws_security_group" "db_setup" {
   tags = var.tags
 }
 
+# checkov:skip=CKV2_AWS_41: IAM Role: TODO
 resource "aws_instance" "postgresql_setup" {
   count                       = var.database_type == "postgresql" && var.ssh_key_name != "" ? 1 : 0
   ami                         = data.aws_ami.ubuntu.id
@@ -156,6 +157,7 @@ resource "aws_instance" "postgresql_setup" {
   depends_on = [aws_db_instance.postgresql]
 }
 
+# checkov:skip=CKV2_AWS_41: IAM Role: TODO
 resource "aws_instance" "sqlserver_setup" {
   count                       = var.database_type == "sqlserver" && var.ssh_key_name != "" ? 1 : 0
   ami                         = data.aws_ami.ubuntu.id

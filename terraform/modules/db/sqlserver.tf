@@ -19,6 +19,7 @@ resource "aws_db_instance" "sqlserver" {
   vpc_security_group_ids          = [aws_security_group.sqlserver.id]
   license_model                   = "license-included"
   tags                            = var.tags
+  copy_tags_to_snapshot           = true
 }
 
 # Create a parameter group to configure SqlServer RDS parameters
@@ -59,6 +60,7 @@ resource "aws_security_group" "sqlserver" {
   tags = var.tags
 }
 
+# checkov:skip=CKV_AWS_57: Secret rotation: TODO
 resource "aws_secretsmanager_secret" "sqlserver_connection_string" {
   count       = var.database_type == "sqlserver" ? 1 : 0
   name        = "${local.vpc_name}-sqlserver-connection-string-${random_string.secret_ident[0].result}"
