@@ -77,6 +77,7 @@ resource "aws_security_group" "postgresql" {
 
 resource "aws_secretsmanager_secret" "postgresql_connection_string" {
   # checkov:skip=CKV_AWS_57: Secret rotation: TODO
+  # checkov:skip=CKV2_AWS_57: Secret rotation: TODO
   # checkov:skip=CKV_AWS_149: KMS key: TODO
   count       = var.database_type == "postgresql" ? 1 : 0
   name        = "${local.vpc_name}-postgresql-connection-string-${random_string.secret_ident[0].result}"

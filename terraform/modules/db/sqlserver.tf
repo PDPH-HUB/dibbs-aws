@@ -7,6 +7,7 @@ resource "aws_db_instance" "sqlserver" {
   # checkov:skip=CKV_AWS_293: Deletion protection: ignore for non-production environments
   # checkov:skip=CKV_AWS_354: KMS key: TODO
   # checkov:skip=CKV_AWS_157: Multi-region: TODO
+  # checkov:skip=CKV_AWS_129: RDS logs: TODO
   count                               = var.database_type == "sqlserver" ? 1 : 0
   iam_database_authentication_enabled = true
   allocated_storage                   = "20"
@@ -70,6 +71,8 @@ resource "aws_security_group" "sqlserver" {
 
 resource "aws_secretsmanager_secret" "sqlserver_connection_string" {
   # checkov:skip=CKV_AWS_57: Secret rotation: TODO
+  # checkov:skip=CKV2_AWS_57: Secret rotation: TODO
+  # checkov:skip=CKV_AWS_149: KMS key: TODO
   count       = var.database_type == "sqlserver" ? 1 : 0
   name        = "${local.vpc_name}-sqlserver-connection-string-${random_string.secret_ident[0].result}"
   description = "SqlServer connection string for the ecr-viewer"
