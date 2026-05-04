@@ -25,8 +25,8 @@ data "http" "myip" {
   url = "https://ipv4.icanhazip.com"
 }
 
-# checkov:skip=CKV_AWS_382: Ephemeral DB setup instances require internet access for provisioning (apt install, sqlcmd download)
 resource "aws_security_group" "db_setup" {
+  # checkov:skip=CKV_AWS_382: Ephemeral DB setup instances require internet access for provisioning (apt install, sqlcmd download)
   vpc_id = var.vpc_id
 
   # Database setup security group for SSH access from user IP
@@ -55,8 +55,8 @@ resource "aws_security_group" "db_setup" {
   tags = var.tags
 }
 
-# checkov:skip=CKV2_AWS_41: IAM Role: TODO
 resource "aws_instance" "postgresql_setup" {
+  # checkov:skip=CKV2_AWS_41: IAM Role: TODO
   count                       = var.database_type == "postgresql" && var.ssh_key_name != "" ? 1 : 0
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = "t3.micro"
@@ -157,8 +157,8 @@ resource "aws_instance" "postgresql_setup" {
   depends_on = [aws_db_instance.postgresql]
 }
 
-# checkov:skip=CKV2_AWS_41: IAM Role: TODO
 resource "aws_instance" "sqlserver_setup" {
+  # checkov:skip=CKV2_AWS_41: IAM Role: TODO
   count                       = var.database_type == "sqlserver" && var.ssh_key_name != "" ? 1 : 0
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = "t3.micro"

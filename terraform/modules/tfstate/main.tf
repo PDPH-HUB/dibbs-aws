@@ -1,8 +1,8 @@
-# checkov:skip=CKV_AWS_18: Access logging: TODO
-# checkov:skip=CKV_AWS_61: Lifecycle configuration: TODO
-# checkov:skip=CKV_AWS_144: Cross-region replication: TODO
-# checkov:skip=CKV2_AWS_62: Event notifications: TODO
 resource "aws_s3_bucket" "tfstate" {
+  # checkov:skip=CKV_AWS_18: Access logging: TODO
+  # checkov:skip=CKV_AWS_61: Lifecycle configuration: TODO
+  # checkov:skip=CKV_AWS_144: Cross-region replication: TODO
+  # checkov:skip=CKV2_AWS_62: Event notifications: TODO
   bucket = "${var.project}-tfstate-${var.owner}-${var.identifier}"
 
   force_destroy = true

@@ -60,8 +60,8 @@ resource "aws_security_group" "sqlserver" {
   tags = var.tags
 }
 
-# checkov:skip=CKV_AWS_57: Secret rotation: TODO
 resource "aws_secretsmanager_secret" "sqlserver_connection_string" {
+  # checkov:skip=CKV_AWS_57: Secret rotation: TODO
   count       = var.database_type == "sqlserver" ? 1 : 0
   name        = "${local.vpc_name}-sqlserver-connection-string-${random_string.secret_ident[0].result}"
   description = "SqlServer connection string for the ecr-viewer"
