@@ -56,6 +56,7 @@ resource "aws_security_group" "db_setup" {
 }
 
 resource "aws_instance" "postgresql_setup" {
+  # checkov:skip=CKV_AWS_88: Public Ip association: Required for setup of the database, will be removed after provisioning is complete
   # checkov:skip=CKV2_AWS_41: IAM Role: TODO
   count                       = var.database_type == "postgresql" && var.ssh_key_name != "" ? 1 : 0
   ami                         = data.aws_ami.ubuntu.id
@@ -168,6 +169,7 @@ resource "aws_instance" "postgresql_setup" {
 }
 
 resource "aws_instance" "sqlserver_setup" {
+  # checkov:skip=CKV_AWS_88: Public Ip association: Required for setup of the database, will be removed after provisioning is complete
   # checkov:skip=CKV2_AWS_41: IAM Role: TODO
   count                       = var.database_type == "sqlserver" && var.ssh_key_name != "" ? 1 : 0
   ami                         = data.aws_ami.ubuntu.id

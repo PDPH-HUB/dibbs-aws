@@ -20,6 +20,10 @@ resource "aws_db_instance" "sqlserver" {
   license_model                   = "license-included"
   tags                            = var.tags
   copy_tags_to_snapshot           = true
+  storage_encrypted               = true
+  monitoring_interval             = 60
+  performance_insights_enabled    = true
+  auto_minor_version_upgrade      = true
 }
 
 # Create a parameter group to configure SqlServer RDS parameters

@@ -20,6 +20,10 @@ resource "aws_db_instance" "postgresql" {
   vpc_security_group_ids          = [aws_security_group.postgresql.id]
   depends_on                      = [aws_secretsmanager_secret.postgresql_connection_string]
   copy_tags_to_snapshot           = true
+  storage_encrypted               = true
+  monitoring_interval             = 60
+  performance_insights_enabled    = true
+  auto_minor_version_upgrade      = true
 }
 
 # Create a parameter group to configure Postgres RDS parameters
