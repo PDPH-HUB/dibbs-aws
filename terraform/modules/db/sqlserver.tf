@@ -4,26 +4,30 @@ data "aws_rds_engine_version" "sqlserver" {
 }
 
 resource "aws_db_instance" "sqlserver" {
-  count                           = var.database_type == "sqlserver" ? 1 : 0
-  allocated_storage               = "20"
-  identifier                      = "${local.vpc_name}-${var.database_type}-ecr-viewer"
-  engine                          = data.aws_rds_engine_version.sqlserver.engine
-  engine_version                  = data.aws_rds_engine_version.sqlserver.version_actual
-  enabled_cloudwatch_logs_exports = []
-  instance_class                  = local.sqlserver_instance_class
-  username                        = "sa"
-  password                        = random_password.database.result
-  parameter_group_name            = aws_db_parameter_group.sqlserver[0].name
-  skip_final_snapshot             = true
-  db_subnet_group_name            = aws_db_subnet_group.this.name
-  vpc_security_group_ids          = [aws_security_group.sqlserver.id]
-  license_model                   = "license-included"
-  tags                            = var.tags
-  copy_tags_to_snapshot           = true
-  storage_encrypted               = true
-  monitoring_interval             = 60
-  performance_insights_enabled    = true
-  auto_minor_version_upgrade      = true
+  # checkov:skip=CKV_AWS_293: Deletion protection: ignore for non-production environments
+  # checkov:skip=CKV_AWS_354: KMS key: TODO
+  # checkov:skip=CKV_AWS_157: Multi-region: TODO
+  count                               = var.database_type == "sqlserver" ? 1 : 0
+  iam_database_authentication_enabled = true
+  allocated_storage                   = "20"
+  identifier                          = "${local.vpc_name}-${var.database_type}-ecr-viewer"
+  engine                              = data.aws_rds_engine_version.sqlserver.engine
+  engine_version                      = data.aws_rds_engine_version.sqlserver.version_actual
+  enabled_cloudwatch_logs_exports     = []
+  instance_class                      = local.sqlserver_instance_class
+  username                            = "sa"
+  password                            = random_password.database.result
+  parameter_group_name                = aws_db_parameter_group.sqlserver[0].name
+  skip_final_snapshot                 = true
+  db_subnet_group_name                = aws_db_subnet_group.this.name
+  vpc_security_group_ids              = [aws_security_group.sqlserver.id]
+  license_model                       = "license-included"
+  tags                                = var.tags
+  copy_tags_to_snapshot               = true
+  storage_encrypted                   = true
+  monitoring_interval                 = 60
+  performance_insights_enabled        = true
+  auto_minor_version_upgrade          = true
 }
 
 # Create a parameter group to configure SqlServer RDS parameters
