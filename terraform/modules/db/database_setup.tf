@@ -73,7 +73,7 @@ resource "aws_instance" "postgresql_setup" {
   }
 
   root_block_device {
-    encrypted     = true
+    encrypted = true
   }
 
   provisioner "file" {
@@ -186,7 +186,7 @@ resource "aws_instance" "sqlserver_setup" {
   }
 
   root_block_device {
-    encrypted     = true
+    encrypted = true
   }
 
   provisioner "file" {
