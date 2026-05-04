@@ -64,6 +64,16 @@ resource "aws_instance" "postgresql_setup" {
   vpc_security_group_ids      = [aws_security_group.db_setup.id]
   associate_public_ip_address = true
   key_name                    = var.ssh_key_name
+  ebs_optimized               = true
+  monitoring                  = true
+
+  metadata_options {
+    http_endpoint = "disabled"
+  }
+
+  root_block_device {
+    encrypted     = true
+  }
 
   provisioner "file" {
     content     = <<-EOF
@@ -166,6 +176,16 @@ resource "aws_instance" "sqlserver_setup" {
   vpc_security_group_ids      = [aws_security_group.db_setup.id]
   associate_public_ip_address = true
   key_name                    = var.ssh_key_name
+  ebs_optimized               = true
+  monitoring                  = true
+
+  metadata_options {
+    http_endpoint = "disabled"
+  }
+
+  root_block_device {
+    encrypted     = true
+  }
 
   provisioner "file" {
     content     = <<-EOF
