@@ -34,7 +34,7 @@ resource "aws_security_group" "db_setup" {
 
   # Allow inbound traffic on port 22 to SSH from the user's IP address
   ingress {
-    description = "Allow SSH access from user's IP address"
+    description = "Allow SSH access from users IP address"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
