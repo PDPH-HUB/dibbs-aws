@@ -102,6 +102,7 @@ data "aws_iam_policy_document" "wildcard" {
       "iam:GetRolePolicy",
       "inspector2:ListAccountPermissions",
       "inspector2:Disable",
+      "inspector2:Enable",
       "kms:CreateKey",
       "kms:CreateAlias",
       "kms:DescribeKey",
