@@ -1,2 +1,3 @@
 migrate-db_config.yml
 test_connect.py
+.terraform/
