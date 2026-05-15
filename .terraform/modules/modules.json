@@ -1,0 +1,1 @@
+{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"ecs","Source":"registry.terraform.io/CDCgov/dibbs-ecr-viewer/aws","Version":"1.0.0","Dir":".terraform/modules/ecs"}]}
