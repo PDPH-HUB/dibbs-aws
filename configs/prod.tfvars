@@ -57,6 +57,15 @@ task_size_overrides = [
         target_cpu = 60
         target_memory = 70
     } 
+        # ecr-viewer
+    {
+        cpu = 2048
+        memory = 4096
+        max_capacity = 5
+        min_capacity = 1
+        target_cpu = 60
+        target_memory = 70
+    }
 ]
 
 # S3 Logging Bucket

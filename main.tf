@@ -55,6 +55,7 @@ module "ecs" {
   override_autoscaling = {
     # Define fhir converter resources
     fhir-converter = var.task_size_overrides[0]
+    ecr-viewer     = var.task_size_overrides[1]
   }
 
   # Logging for ALB
