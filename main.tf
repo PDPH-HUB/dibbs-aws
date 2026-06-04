@@ -52,10 +52,13 @@ module "ecs" {
   secrets_manager_auth_client_secret_version = var.secret_manager__auth_client_secret_version
 
   # Set Container Size
-  override_autoscaling = {
-    # Define fhir converter resources
-    fhir-converter = var.task_size_overrides[0]
-    ecr-viewer     = var.task_size_overrides[1]
+override_autoscaling = {
+    ecr-viewer              = var.task_size_overrides[0]
+    fhir-converter          = var.task_size_overrides[1]
+    ingestion               = var.task_size_overrides[2]
+    message-parser          = var.task_size_overrides[3]
+    orchestration           = var.task_size_overrides[4]
+    trigger-code-reference  = var.task_size_overrides[5]
   }
 
   # Logging for ALB

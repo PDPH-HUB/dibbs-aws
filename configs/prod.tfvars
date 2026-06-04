@@ -46,9 +46,9 @@ cert_name = "pdphdibbs.phila.gov"
 
 phdi_version = "9.1.1"
 
-task_size_overrides = [ 
-    
-    # fhir-converter
+task_size_overrides = [
+
+    # [0] ecr-viewer
     {
         cpu = 2048
         memory = 4096
@@ -57,10 +57,51 @@ task_size_overrides = [
         target_cpu = 60
         target_memory = 70
     },
-        # ecr-viewer
+
+    # [1] fhir-converter
     {
         cpu = 2048
         memory = 4096
+        max_capacity = 5
+        min_capacity = 1
+        target_cpu = 60
+        target_memory = 70
+    },
+
+    # [2] ingestion
+    {
+        cpu = 512
+        memory = 1024
+        max_capacity = 5
+        min_capacity = 1
+        target_cpu = 60
+        target_memory = 70
+    },
+
+    # [3] message-parser
+    {
+        cpu = 1024
+        memory = 2048
+        max_capacity = 5
+        min_capacity = 1
+        target_cpu = 60
+        target_memory = 70
+    },
+
+    # [4] orchestration
+    {
+        cpu = 512
+        memory = 1024
+        max_capacity = 5
+        min_capacity = 1
+        target_cpu = 60
+        target_memory = 70
+    },
+
+    # [5] trigger-code-reference
+    {
+        cpu = 512
+        memory = 1024
         max_capacity = 5
         min_capacity = 1
         target_cpu = 60
