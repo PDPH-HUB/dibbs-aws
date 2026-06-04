@@ -56,7 +56,7 @@ task_size_overrides = [
         min_capacity = 1
         target_cpu = 60
         target_memory = 70
-    } 
+    },
         # ecr-viewer
     {
         cpu = 2048
