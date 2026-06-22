@@ -1,6 +1,6 @@
 data "aws_rds_engine_version" "postgresql" {
   engine             = local.postgresql_engine
-  version            = [local.postgresql_engine_major_version]
+  version            = local.postgresql_engine_major_version
   latest             = true
 }
 
