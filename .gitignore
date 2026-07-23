@@ -21,7 +21,6 @@ node_modules/
 terraform.tfstate
 terraform.tfstate.d
 terraform.tfstate.backup
-*.tfvars
 .vscode/settings.json
 credentials.json
 .bash_profile
