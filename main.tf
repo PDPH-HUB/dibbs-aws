@@ -6,16 +6,16 @@ data "aws_acm_certificate" "this" {
 }
 
 module "ecs" {
-  
+
   source  = "CDCgov/dibbs-ecr-viewer/aws"
   version = "1.0.0"
 
-  public_subnet_ids  = flatten(var.public_subnets)
+  public_subnet_ids = flatten(var.public_subnets)
 
   private_subnet_ids = flatten(var.private_subnets)
 
-  vpc_id             = var.vpc_id
-  region             = var.region
+  vpc_id = var.vpc_id
+  region = var.region
 
   owner   = var.owner
   project = var.project
@@ -26,47 +26,48 @@ module "ecs" {
 
   # Pass cert arn to module
   certificate_arn = data.aws_acm_certificate.this.arn
-  
+
   # database_type = var.ecr_viewer_database_type
 
-  secrets_manager_connection_string_version = var.secret_manager__connection_string_version
-
-  db_cipher = var.db_cipher
+  db_cipher         = var.db_cipher
   dibbs_config_name = var.ecr_viewer_database_schema
 
   # If intent is to pull from the phdi GHCR, set disable_ecr to true (default is false)
   # disable_ecr = true
   # If intent is to use the non-integrated viewer, set non_integrated_viewer to "true" (default is false)
   # non_integrated_viewer = "true"
-  # If the intent is to make the ecr-viewer availabble on the public internet, set internal to false (default is true) This requires an internet gateway to be present in the VPC.
+  # If the intent is to make the ecr-viewer available on the public internet, set internal to false (default is true) This requires an internet gateway to be present in the VPC.
   # internal       = false
-  internal       = true
+  internal     = true
   phdi_version = var.phdi_version
 
   # non integrated auth provider example (default values are "" when not set)
-  auth_provider                              = var.auth_provider
-  auth_client_id                             = var.auth_client_id
-  auth_issuer                                = var.auth_issuer
-  auth_url                                   = var.auth_url
-  secrets_manager_auth_secret_version        = var.secret_manager__auth_secret_version
-  secrets_manager_auth_client_secret_version = var.secret_manager__auth_client_secret_version
+  auth_provider  = var.auth_provider
+  auth_client_id = var.auth_client_id
+  auth_issuer    = var.auth_issuer
+  auth_url       = var.auth_url
+
+  # GitHub Actions secrets, injected as plaintext ECS environment variables at apply time
+  secrets_manager_connection_string_version  = var.sql_connection_string
+  secrets_manager_auth_secret_version        = var.nextauth_secret
+  secrets_manager_auth_client_secret_version = var.auth_client_secret
 
   # Set Container Size
-override_autoscaling = {
-    ecr-viewer              = var.task_size_overrides[0]
-    fhir-converter          = var.task_size_overrides[1]
-    ingestion               = var.task_size_overrides[2]
-    message-parser          = var.task_size_overrides[3]
-    orchestration           = var.task_size_overrides[4]
-    trigger-code-reference  = var.task_size_overrides[5]
+  override_autoscaling = {
+    ecr-viewer             = var.task_size_overrides[0]
+    fhir-converter         = var.task_size_overrides[1]
+    ingestion              = var.task_size_overrides[2]
+    message-parser         = var.task_size_overrides[3]
+    orchestration          = var.task_size_overrides[4]
+    trigger-code-reference = var.task_size_overrides[5]
   }
 
   # Logging for ALB
-  enable_alb_logs = var.enable_alb_logs
+  enable_alb_logs        = var.enable_alb_logs
   s3_logging_bucket_name = local.s3_logging_bucket_name
 
   # Timeouts
-  alb_idle_timeout = 3600 # seconds
+  alb_idle_timeout       = 3600    # seconds
   ecr_processing_timeout = 3600000 # miliseconds
 
 }
