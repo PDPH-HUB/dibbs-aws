@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        dirs: [terraform/modules/oidc, terraform/modules/tfstate, terraform/implementation/setup, terraform/implementation/ecs]
+        dirs: [terraform/implementation/ecs, terraform/modules/db]
 
     steps:
       - uses: actions/checkout@v6
