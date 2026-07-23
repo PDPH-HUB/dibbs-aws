@@ -4,7 +4,7 @@ import yaml
 from pathlib import Path
 
 # Environment selector
-ENVIRONMENT = "dev"
+ENVIRONMENT = "prod"
 
 def load_config():
     script_dir = Path(__file__).parent.parent
@@ -24,7 +24,7 @@ AUTHORITY = f"https://login.microsoftonline.com/{TENANT_ID}"
 DIBBS_SCOPE = f"{CLIENT_ID}/.default"
 
 # migrate-db config
-DIBBS_URL = config['dibbs_url']
+DIBBS_URL = config['base_url']
 MIGRATION_SECRET = config['migration_secret']
 INIT_ADMIN_EMAIL = config['init_admin_email']
 
