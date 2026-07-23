@@ -75,9 +75,9 @@ jobs:
           DYNAMODB_TABLE: ${{ vars.TFSTATE_DYNAMODB_TABLE }}
           REGION: ${{ vars.AWS_REGION }}
           WORKSPACE: ${{ env.workspace }}
-          TF_VAR_secret_manager__connection_string_version: ${{ github.event.inputs.workspace == 'prod' && secrets.PROD_SQL_CONNECTION_STRING || secrets.DEV_SQL_CONNECTION_STRING }}
-          TF_VAR_secret_manager__auth_secret_version: ${{ github.event.inputs.workspace == 'prod' && secrets.PROD_AUTH_SECRET_VERSION || secrets.DEV_AUTH_SECRET_VERSION }}
-          TF_VAR_secret_manager__auth_client_secret_version: ${{ github.event.inputs.workspace == 'prod' && secrets.PROD_AUTH_CLIENT_SECRET_VERSION || secrets.DEV_AUTH_CLIENT_SECRET_VERSION }}
+          TF_VAR_sql_connection_string: ${{ github.event.inputs.workspace == 'prod' && secrets.PROD_SQL_CONNECTION_STRING || secrets.DEV_SQL_CONNECTION_STRING }}
+          TF_VAR_nextauth_secret: ${{ github.event.inputs.workspace == 'prod' && secrets.PROD_NEXTAUTH_SECRET || secrets.DEV_NEXTAUTH_SECRET }}
+          TF_VAR_auth_client_secret: ${{ github.event.inputs.workspace == 'prod' && secrets.PROD_AUTH_CLIENT_SECRET || secrets.DEV_AUTH_CLIENT_SECRET }}
         shell: bash
         run: |
           terraform init \
