@@ -1,0 +1,103 @@
+name: Terraform (Plan||Apply||Destroy)
+run-name: Terraform ${{ inputs.terraform_action }} ${{ inputs.workspace }} by @${{ github.actor }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      workspace:
+        description: 'The workspace to terraform against'
+        required: true
+        type: choice
+        options:
+          - prod
+          - dev
+      terraform_action:
+        description: 'The terraform action to perform'
+        required: true
+        type: choice
+        options:
+          - plan
+          - apply
+          - plan-destroy
+          - "---"
+          - destroy
+
+concurrency:
+  group: ${{ github.event.inputs.workspace }}-terraform
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  workspace: ${{ github.event.inputs.workspace }}
+  terraform_action: ${{ github.event.inputs.terraform_action }}
+
+jobs:
+  terraform:
+    name: Run Terraform
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.workspace == 'prod' && 'Prod' || 'Dev' }}
+    defaults:
+      run:
+        shell: bash
+        working-directory: terraform/implementation/ecs
+    steps:
+      - name: Check Out Changes
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.8"
+
+      - name: configure aws production credentials
+        if: env.workspace == 'prod'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          role-session-name: githubDeploymentWorkflow
+          aws-region: ${{ vars.AWS_REGION }}
+        
+      - name: configure aws dev credentials
+        if: env.workspace == 'dev'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEV_ROLE_ARN }}
+          role-session-name: githubDeploymentWorkflow
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Terraform
+        env:
+          ACTION: ${{ env.terraform_action }}
+          BUCKET: ${{ vars.TFSTATE_BUCKET }}
+          DYNAMODB_TABLE: ${{ vars.TFSTATE_DYNAMODB_TABLE }}
+          REGION: ${{ vars.AWS_REGION }}
+          WORKSPACE: ${{ env.workspace }}
+          TF_VAR_sql_connection_string: ${{ github.event.inputs.workspace == 'prod' && secrets.PROD_SQL_CONNECTION_STRING || secrets.DEV_SQL_CONNECTION_STRING }}
+          TF_VAR_nextauth_secret: ${{ github.event.inputs.workspace == 'prod' && secrets.PROD_NEXTAUTH_SECRET || secrets.DEV_NEXTAUTH_SECRET }}
+          TF_VAR_auth_client_secret: ${{ github.event.inputs.workspace == 'prod' && secrets.PROD_AUTH_CLIENT_SECRET || secrets.DEV_AUTH_CLIENT_SECRET }}
+        shell: bash
+        run: |
+          terraform init \
+            -upgrade \
+            -var-file="$WORKSPACE.tfvars" \
+            -backend-config "bucket=$BUCKET" \
+            -backend-config "dynamodb_table=$DYNAMODB_TABLE" \
+            -backend-config "region=$REGION" \
+            || (echo "terraform init failed, exiting..." && exit 1)
+          rm -rf .terraform/modules/ecs/.git
+          terraform workspace select -or-create "$WORKSPACE"
+          if [ "$ACTION" == "plan" ]; then
+            terraform plan -var-file="$WORKSPACE.tfvars"
+          fi
+          if [ "$ACTION" == "apply" ]; then
+            terraform apply -auto-approve -var-file="$WORKSPACE.tfvars"
+          fi
+          if [ "$ACTION" == "plan-destroy" ]; then
+            terraform plan -destroy -var-file="$WORKSPACE.tfvars"
+          fi
+          if [ "$ACTION" == "destroy" ]; then
+            terraform destroy -auto-approve -var-file="$WORKSPACE.tfvars"
+          fi
