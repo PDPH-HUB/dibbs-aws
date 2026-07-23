@@ -32,3 +32,5 @@ terraform/implementation/ecs/tmp*
 
 #JetBrains IDE
 .idea
+
+configs/migrate-db_config.yml
