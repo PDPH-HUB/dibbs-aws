@@ -85,7 +85,7 @@ resource "aws_route53_record" "alb" {
   type    = "A"
 
   alias {
-    name                   = module.ecs.alb_dns_name
+    name                   = "dualstack.${module.ecs.alb_dns_name}"
     zone_id                = data.aws_lb.ecs.zone_id
     evaluate_target_health = true
   }
