@@ -5,7 +5,7 @@ data "aws_acm_certificate" "this" {
 }
 
 module "ecs" {
-  source = "git::https://github.com/CDCgov/terraform-aws-dibbs-ecr-viewer.git?ref=292d3057adf75303689deeedd89b46c3462faf27"
+  source = "git::https://github.com/CDCgov/terraform-aws-dibbs-ecr-viewer.git?ref=57f7aa28fb1966416d7a49edf894fa4d65e68204"
 
   public_subnet_ids  = flatten(var.public_subnets)
   private_subnet_ids = flatten(var.private_subnets)
