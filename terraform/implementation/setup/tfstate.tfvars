@@ -16,3 +16,6 @@ prod_waf_web_acl_arn = "arn:aws:wafv2:us-east-1:047719641506:regional/webacl/dib
 tfstate_bucket_arn         = "arn:aws:s3:::dibbs-ce-tfstate-pdph-s8bnxvvy"
 tfstate_bucket_name        = "dibbs-ce-tfstate-pdph-s8bnxvvy"
 tfstate_dynamodb_table_arn = "arn:aws:dynamodb:us-east-1:047719641506:table/dibbs-ce-tfstate-lock-pdph-s8bnxvvy"
+
+dev_log_encryption_key_arn  = "arn:aws:kms:us-east-1:047719641506:key/28ef30bf-aadb-4608-ad01-e5b63661279d"
+prod_log_encryption_key_arn = "arn:aws:kms:us-east-1:047719641506:key/294bff66-3277-4529-b784-9b5082334e9e"

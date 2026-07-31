@@ -76,3 +76,9 @@ variable "waf_web_acl_arn" {
   description = "ARN of the WAF Web ACL this role manages"
   default     = ""
 }
+
+variable "log_encryption_key_arn" {
+  type        = string
+  description = "ARN of the KMS key encrypting this environment's CloudWatch log groups, for reading encrypted log events"
+  default     = ""
+}

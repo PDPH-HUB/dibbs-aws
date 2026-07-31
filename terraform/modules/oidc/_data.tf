@@ -155,6 +155,14 @@ data "aws_iam_policy_document" "route53_waf_scoped" {
   }
 }
 
+# Read access to this environment's CloudWatch log encryption key
+data "aws_iam_policy_document" "log_decrypt_scoped" {
+  statement {
+    actions   = ["kms:Decrypt"]
+    resources = [var.log_encryption_key_arn]
+  }
+}
+
 # Scoped policies
 # trivy:ignore:AVD-AWS-0057
 data "aws_iam_policy_document" "scoped_one" {

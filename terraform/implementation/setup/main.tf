@@ -28,6 +28,7 @@ module "oidc_dev" {
 
   route53_hosted_zone_arn = var.dev_route53_hosted_zone_arn
   waf_web_acl_arn         = var.dev_waf_web_acl_arn
+  log_encryption_key_arn  = var.dev_log_encryption_key_arn
 
   state_bucket_arn   = var.tfstate_bucket_arn
   dynamodb_table_arn = var.tfstate_dynamodb_table_arn
@@ -49,6 +50,7 @@ module "oidc_prod" {
 
   route53_hosted_zone_arn = var.prod_route53_hosted_zone_arn
   waf_web_acl_arn         = var.prod_waf_web_acl_arn
+  log_encryption_key_arn  = var.prod_log_encryption_key_arn
 
   state_bucket_arn   = var.tfstate_bucket_arn
   dynamodb_table_arn = var.tfstate_dynamodb_table_arn
