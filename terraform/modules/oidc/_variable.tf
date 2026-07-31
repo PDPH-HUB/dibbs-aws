@@ -41,9 +41,9 @@ variable "workspace" {
   description = "terraform workspace that OIDC will have permissions to"
 }
 
-variable "vpc_id" {
+variable "resource_name_prefix" {
   type        = string
-  description = "ID of the VPC"
+  description = "Naming prefix matching how the deployed resources are actually named (e.g. dibbs-ce-pdph-prod), not an AWS VPC ID despite resembling one in some ARN patterns"
   default     = ""
 }
 

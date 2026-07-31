@@ -24,7 +24,7 @@ module "oidc_dev" {
 
   resource_tag_to_match = "workspace"
   workspace             = "dev"
-  vpc_id                = var.dev_vpc_id
+  resource_name_prefix  = var.dev_resource_name_prefix
 
   route53_hosted_zone_arn = var.dev_route53_hosted_zone_arn
   waf_web_acl_arn         = var.dev_waf_web_acl_arn
@@ -45,7 +45,7 @@ module "oidc_prod" {
 
   resource_tag_to_match = "workspace"
   workspace             = "prod"
-  vpc_id                = var.prod_vpc_id
+  resource_name_prefix  = var.prod_resource_name_prefix
 
   route53_hosted_zone_arn = var.prod_route53_hosted_zone_arn
   waf_web_acl_arn         = var.prod_waf_web_acl_arn
