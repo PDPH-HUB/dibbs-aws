@@ -66,3 +66,13 @@ variable "prod_waf_web_acl_arn" {
   description = "ARN of the prod WAF Web ACL"
   type        = string
 }
+
+variable "dev_log_encryption_key_arn" {
+  description = "ARN of the KMS key encrypting dev's CloudWatch log groups"
+  type        = string
+}
+
+variable "prod_log_encryption_key_arn" {
+  description = "ARN of the KMS key encrypting prod's CloudWatch log groups"
+  type        = string
+}
