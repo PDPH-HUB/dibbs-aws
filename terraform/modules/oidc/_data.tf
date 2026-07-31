@@ -46,7 +46,7 @@ data "aws_iam_policy_document" "storage" {
   }
 }
 
-# Wildcard policy
+# Wildcard policy: remaining actions require AWS-mandated wildcard resource
 # trivy:ignore:AVD-AWS-0057
 data "aws_iam_policy_document" "wildcard" {
   statement {
@@ -120,19 +120,38 @@ data "aws_iam_policy_document" "wildcard" {
       "rds:ListTagsForResource",
       "rds:DescribeDBInstances",
       "route53:CreateHostedZone",
-      "route53:GetHostedZone",
-      "route53:ListTagsForResource",
-      "route53:ChangeResourceRecordSets",
-      "route53:GetChange",
-      "route53:ListResourceRecordSets",
       "secretsmanager:GetSecretValue",
-      "wafv2:ListTagsForResource",
-      "wafv2:UpdateWebACL",
-      "wafv2:GetWebACLForResource",
     ]
     resources = [
       "*"
     ]
+  }
+}
+
+# Route53/WAF actions scoped to the real per-environment ARNs
+data "aws_iam_policy_document" "route53_waf_scoped" {
+  statement {
+    actions = [
+      "route53:GetHostedZone",
+      "route53:ListTagsForResource",
+      "route53:ChangeResourceRecordSets",
+      "route53:ListResourceRecordSets",
+    ]
+    resources = [var.route53_hosted_zone_arn]
+  }
+
+  statement {
+    actions   = ["route53:GetChange"]
+    resources = ["arn:aws:route53:::change/*"]
+  }
+
+  statement {
+    actions = [
+      "wafv2:ListTagsForResource",
+      "wafv2:UpdateWebACL",
+      "wafv2:GetWebACLForResource",
+    ]
+    resources = [var.waf_web_acl_arn]
   }
 }
 

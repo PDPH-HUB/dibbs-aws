@@ -4,7 +4,6 @@ data "aws_rds_engine_version" "postgresql" {
   latest  = true
 }
 
-#checkov:skip=CKV2_AWS_60:module "db" unused in our environment
 resource "aws_db_instance" "postgresql" {
   count                           = var.database_type == "postgresql" ? 1 : 0
   allocated_storage               = "20"
