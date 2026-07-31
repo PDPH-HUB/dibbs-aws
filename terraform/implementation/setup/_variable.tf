@@ -46,3 +46,23 @@ variable "tfstate_dynamodb_table_arn" {
   description = "ARN of the existing tfstate lock DynamoDB table"
   type        = string
 }
+
+variable "dev_route53_hosted_zone_arn" {
+  description = "ARN of the dev Route53 hosted zone"
+  type        = string
+}
+
+variable "prod_route53_hosted_zone_arn" {
+  description = "ARN of the prod Route53 hosted zone"
+  type        = string
+}
+
+variable "dev_waf_web_acl_arn" {
+  description = "ARN of the dev WAF Web ACL"
+  type        = string
+}
+
+variable "prod_waf_web_acl_arn" {
+  description = "ARN of the prod WAF Web ACL"
+  type        = string
+}

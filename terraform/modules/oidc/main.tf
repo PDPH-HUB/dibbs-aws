@@ -19,6 +19,11 @@ resource "aws_iam_policy" "scoped_two" {
   policy = data.aws_iam_policy_document.scoped_two.json
 }
 
+resource "aws_iam_policy" "route53_waf_scoped" {
+  name   = "${var.project}-route53-waf-scoped-policy-${var.owner}-${random_string.oidc.result}"
+  policy = data.aws_iam_policy_document.route53_waf_scoped.json
+}
+
 resource "aws_iam_policy" "request_tags_create_actions" {
   name   = "${var.project}-request-tags-policy-${var.owner}-${random_string.oidc.result}"
   policy = data.aws_iam_policy_document.request_tags_create_actions.json
@@ -45,6 +50,7 @@ resource "aws_iam_role" "github" {
     aws_iam_policy.wildcard.arn,
     aws_iam_policy.scoped_one.arn,
     aws_iam_policy.scoped_two.arn,
+    aws_iam_policy.route53_waf_scoped.arn,
     aws_iam_policy.request_tags_create_actions.arn,
     aws_iam_policy.resource_tags_update_actions.arn,
     aws_iam_policy.resource_tags_delete_actions.arn,

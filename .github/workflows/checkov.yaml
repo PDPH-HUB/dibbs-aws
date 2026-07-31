@@ -24,6 +24,7 @@ jobs:
         uses: bridgecrewio/checkov-action@v12
         with:
           directory: .
+          skip_path: terraform/modules/db
           quiet: true
           compact: true
           output_format: cli

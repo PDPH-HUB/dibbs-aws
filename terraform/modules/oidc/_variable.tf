@@ -64,3 +64,15 @@ variable "resource_tag_to_match" {
   description = "The parameter to match for permissions"
   default     = ""
 }
+
+variable "route53_hosted_zone_arn" {
+  type        = string
+  description = "ARN of the Route53 hosted zone this role manages records in"
+  default     = ""
+}
+
+variable "waf_web_acl_arn" {
+  type        = string
+  description = "ARN of the WAF Web ACL this role manages"
+  default     = ""
+}
