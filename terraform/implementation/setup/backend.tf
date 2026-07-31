@@ -21,9 +21,9 @@ provider "aws" {
   region = "us-east-1"
   default_tags {
     tags = {
-      owner       = "skylight"
+      owner       = var.owner
       environment = "tfstate"
-      project     = "dibbs"
+      project     = var.project
     }
   }
 }

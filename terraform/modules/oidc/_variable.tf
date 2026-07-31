@@ -1,9 +1,10 @@
+# numeric-ID-pinned trust format, hardened after a repo rename broke trust
 variable "oidc_github_repo" {
   description = "The GitHub repository for OIDC"
   type        = string
   default     = ""
   validation {
-    condition     = length(var.oidc_github_repo) == 0 || can(regex("^[a-zA-Z0-9-]+/[a-zA-Z0-9-]+$", var.oidc_github_repo))
+    condition     = length(var.oidc_github_repo) == 0 || can(regex("^[a-zA-Z0-9-]+(@[0-9]+)?/[a-zA-Z0-9-]+(@[0-9]+)?$", var.oidc_github_repo))
     error_message = "oidc_github_repo must be set with 'org/repo' format or blank"
   }
 }
@@ -11,7 +12,7 @@ variable "oidc_github_repo" {
 variable "owner" {
   description = "The owner of the project"
   type        = string
-  default     = "skylight"
+  default     = "pdph"
   validation {
     condition     = can(regex("^[[:alnum:]]{1,8}$", var.owner))
     error_message = "owner must be 8 characters or less, all lowercase with no special characters or spaces"
