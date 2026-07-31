@@ -9,13 +9,16 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   tflint:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        dirs: [terraform/implementation/ecs, terraform/modules/db]
+        dirs: [terraform/implementation/ecs, terraform/modules/db, terraform/modules/oidc, terraform/modules/tfstate, terraform/implementation/setup]
 
     steps:
       - uses: actions/checkout@v6

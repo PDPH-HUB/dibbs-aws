@@ -1,6 +1,7 @@
 name: Terraform (Plan||Apply||Destroy)
 run-name: Terraform ${{ inputs.terraform_action }} ${{ inputs.workspace }} by @${{ github.actor }}
 
+#checkov:skip=CKV_GHA_7:workflow_dispatch input required by design
 on:
   workflow_dispatch:
     inputs:
