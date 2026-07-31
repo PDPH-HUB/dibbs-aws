@@ -4,8 +4,8 @@ region  = "us-east-1"
 
 oidc_github_repo = "PDPH-HUB@89149833/dibbs-aws@1310128333"
 
-dev_vpc_id  = "vpc-024d5f60537ead672"
-prod_vpc_id = "vpc-0170a65e2379f875e"
+dev_resource_name_prefix  = "dibbs-ce-pdph-dev"
+prod_resource_name_prefix = "dibbs-ce-pdph-prod"
 
 dev_route53_hosted_zone_arn  = "arn:aws:route53:::hostedzone/Z07691153LDS8OGB3F2JN"
 prod_route53_hosted_zone_arn = "arn:aws:route53:::hostedzone/Z03892602LM02CI72C8P0"

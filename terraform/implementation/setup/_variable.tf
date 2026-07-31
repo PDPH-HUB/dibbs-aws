@@ -22,13 +22,13 @@ variable "region" {
   default     = "us-east-1"
 }
 
-variable "dev_vpc_id" {
-  description = "VPC ID scoping the dev OIDC role's policies"
+variable "dev_resource_name_prefix" {
+  description = "Naming prefix matching how dev resources are actually named (e.g. dibbs-ce-pdph-dev), not a VPC ID"
   type        = string
 }
 
-variable "prod_vpc_id" {
-  description = "VPC ID scoping the prod OIDC role's policies"
+variable "prod_resource_name_prefix" {
+  description = "Naming prefix matching how prod resources are actually named (e.g. dibbs-ce-pdph-prod), not a VPC ID"
   type        = string
 }
 
