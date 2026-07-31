@@ -146,11 +146,7 @@ data "aws_iam_policy_document" "route53_waf_scoped" {
   }
 
   statement {
-    actions = [
-      "wafv2:ListTagsForResource",
-      "wafv2:UpdateWebACL",
-      "wafv2:GetWebACLForResource",
-    ]
+    actions   = ["wafv2:UpdateWebACL"]
     resources = [var.waf_web_acl_arn]
   }
 }
@@ -198,6 +194,8 @@ data "aws_iam_policy_document" "scoped_one" {
       "SNS:ListTagsForResource",
       "wafv2:GetIPSet",
       "wafv2:GetWebACL",
+      "wafv2:GetWebACLForResource",
+      "wafv2:ListTagsForResource",
     ]
     resources = [
       "arn:aws:appmesh:${var.region}:${data.aws_caller_identity.current.account_id}:mesh/${local.resource_name_prefix}",
@@ -210,8 +208,8 @@ data "aws_iam_policy_document" "scoped_one" {
       "arn:aws:ecr:${var.region}:${data.aws_caller_identity.current.account_id}:repository/*",
       "arn:aws:elasticloadbalancing:${var.region}:${data.aws_caller_identity.current.account_id}:*",
       "arn:aws:elasticloadbalancing:${var.region}:${data.aws_caller_identity.current.account_id}:*/*",
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${local.resource_name_prefix}",
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${local.resource_name_prefix}",
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${local.resource_name_prefix}*",
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${local.resource_name_prefix}*",
       "arn:aws:iam::aws:policy/service-role/*",
       "arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:*",
       "arn:aws:rds:${var.region}:${data.aws_caller_identity.current.account_id}:*",
