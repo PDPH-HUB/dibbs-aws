@@ -277,6 +277,7 @@ data "aws_iam_policy_document" "scoped_two" {
       "arn:aws:ec2:${var.region}:${data.aws_caller_identity.current.account_id}:vpc-endpoint/*",
       "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${local.resource_name_prefix}",
       "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${local.resource_name_prefix}*",
+      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService",
       "arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:log-group:/${local.resource_name_prefix}:log-stream:",
       "arn:aws:rds:${var.region}:${data.aws_caller_identity.current.account_id}:pg:*",
       "arn:aws:rds:${var.region}:${data.aws_caller_identity.current.account_id}:subgrp:*",
