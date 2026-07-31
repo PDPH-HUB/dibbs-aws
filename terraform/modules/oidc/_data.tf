@@ -46,10 +46,8 @@ data "aws_iam_policy_document" "storage" {
   }
 }
 
-# Wildcard policy
+# Wildcard policy: remaining actions require AWS-mandated wildcard resource
 # trivy:ignore:AVD-AWS-0057
-#checkov:skip=CKV_AWS_356:remaining actions require AWS-mandated wildcard resource (Describe/List actions, ecr GetAuthorizationToken, kms CreateKey, route53 CreateHostedZone); scopable Route53/WAF actions moved to route53_waf_scoped
-#checkov:skip=CKV_AWS_108:remaining actions require AWS-mandated wildcard resource, same as CKV_AWS_356 above
 data "aws_iam_policy_document" "wildcard" {
   statement {
     actions = [

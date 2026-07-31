@@ -1,6 +1,5 @@
 data "aws_caller_identity" "current" {}
 
-#checkov:skip=CKV_AWS_144:cross-region replication disproportionate for a state bucket, revisit separately
 resource "aws_s3_bucket" "tfstate" {
   bucket = "${var.project}-tfstate-${var.owner}-${var.identifier}"
 
@@ -64,7 +63,6 @@ resource "aws_s3_bucket_notification" "tfstate" {
 }
 
 #checkov:skip=CKV_AWS_18:access-log destination bucket
-#checkov:skip=CKV_AWS_144:cross-region replication disproportionate for a state bucket, revisit separately
 resource "aws_s3_bucket" "tfstate_logs" {
   bucket = "${var.project}-tfstate-${var.owner}-${var.identifier}-logs"
 
@@ -144,7 +142,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "tfstate_logs" {
   }
 }
 
-#checkov:skip=CKV_AWS_145:S3 access-log delivery doesn't reliably support SSE-KMS destination buckets, SSE-S3 is AWS's documented recommendation
 resource "aws_s3_bucket_server_side_encryption_configuration" "tfstate_logs" {
   bucket = aws_s3_bucket.tfstate_logs.bucket
 
@@ -161,7 +158,6 @@ resource "aws_s3_bucket_notification" "tfstate_logs" {
 }
 
 # Create a DynamoDB table for locking the state file
-#checkov:skip=CKV_AWS_119:lock-ID-only table, AWS-owned encryption sufficient
 resource "aws_dynamodb_table" "tfstate_lock" {
   name         = "${var.project}-tfstate-lock-${var.owner}-${var.identifier}"
   hash_key     = "LockID"
