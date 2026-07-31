@@ -1,3 +1,5 @@
+# unused in our environment, kept for upstream parity
+# tflint-ignore: terraform_unused_declarations
 variable "availability_zones" {
   description = "The availability zones to use"
   type        = list(string)
@@ -22,6 +24,8 @@ variable "ecr_viewer_database_schema" {
   default     = "core"
 }
 
+# unused in our environment, kept for upstream parity
+# tflint-ignore: terraform_unused_declarations
 variable "database_type" {
   description = "The type of database to use (postgresql or sqlserver or '')"
   type        = string
@@ -52,6 +56,8 @@ variable "region" {
   default     = "us-east-1"
 }
 
+# unused in our environment, kept for upstream parity
+# tflint-ignore: terraform_unused_declarations
 variable "vpc_cidr" {
   description = "The CIDR block for the VPC"
   type        = string
@@ -122,11 +128,8 @@ variable "secrets_manager_metadata_database_migration_secret_version" {
   sensitive   = true
 }
 
-# Declared for structural parity with upstream. Deliberately NOT wired into
-# main.tf's module "ecs" block -- this default is upstream's own example/demo
-# key, not a PDPH key. Wiring it in would silently enable pub-key auth
-# validation against a key nobody at PDPH controls. Leave unwired unless a
-# real PDPH key is generated and this default is replaced first.
+# unused: upstream's demo key, not PDPH's -- do not wire in
+# tflint-ignore: terraform_unused_declarations
 variable "nbs_pub_key" {
   type        = string
   description = "The public key used to validate the incoming authenication for the eCR Viewer."
@@ -148,10 +151,8 @@ kd+ONf43CmqDSTa3atSFq4sCAwEAAQ==
 EOT
 }
 
-# Declared for structural parity with upstream. No current PDPH equivalent
-# (module "db" is not called from main.tf -- see project plan Section 6.2).
-# Kept unused, same treatment as database_type above, for upstream-diff
-# friendliness rather than deletion.
+# unused, module "db" not called -- kept for upstream parity
+# tflint-ignore: terraform_unused_declarations
 variable "ssh_key_name" {
   description = "The name of the SSH key to use for the instances"
   type        = string

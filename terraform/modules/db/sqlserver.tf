@@ -3,6 +3,7 @@ data "aws_rds_engine_version" "sqlserver" {
   preferred_versions = [local.sqlserver_engine_version]
 }
 
+#checkov:skip=CKV2_AWS_60:module "db" unused in our environment
 resource "aws_db_instance" "sqlserver" {
   count                           = var.database_type == "sqlserver" ? 1 : 0
   allocated_storage               = "20"
