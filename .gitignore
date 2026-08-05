@@ -32,4 +32,6 @@ terraform/implementation/ecs/tmp*
 #JetBrains IDE
 .idea
 
-configs/migrate-db_config.yml
+configs/*
+configs/config.yml
+msal_auth_migrate-db.py
