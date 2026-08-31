@@ -44,7 +44,7 @@ route53_hosted_zone_id = "Z03892602LM02CI72C8P0"
 # This defines the application version being deployed and the resources they're deployed with
 # ------------------------------------------------------------------------------------------------------
 
-phdi_version = "11.0.0"
+phdi_version = "13.0.0"
 
 task_size_overrides = [
 
