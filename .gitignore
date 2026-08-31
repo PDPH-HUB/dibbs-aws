@@ -34,4 +34,3 @@ terraform/implementation/ecs/tmp*
 
 configs/*
 configs/config.yml
-msal_auth_migrate-db.py
